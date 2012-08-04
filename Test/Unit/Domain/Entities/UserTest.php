@@ -1,11 +1,13 @@
 <?php
+namespace Test\Unit\Entities;
 use Domain\Entities\User;
-class UserTest extends PHPUnit_Framework_TestCase
+use Test\Unit\UnitTestBase;
+class UserTest extends UnitTestBase
 {
 	public function testGetUserNameShouldReturnUserName()
 	{
 		$user = new User();
-		$user->setUsername("johnny.test");
+		$this->setObjectValue($user, 'username', 'johnny.test');
 		$this->assertEquals("johnny.test",$user->getUsername());
 	}
 }
