@@ -3,6 +3,11 @@ namespace Domain\Entities;
 class User
 {
 	protected $username;
+	protected $password;
+	protected $identifier;
+	protected $token;
+	protected $timeout;
+	protected $date;
 
 	public function setUsername($username)
 	{
@@ -12,5 +17,55 @@ class User
 	public function getUsername()
 	{
 		return $this->username;
+	}
+
+	public function setPassword($password)
+	{
+		$this->password = $password;
+	}
+
+	public function getPassword()
+	{
+		return $this->password;
+	}
+
+	public function getIdentifier()
+	{
+		return $this->identifier;
+	}
+
+	public function setIdentifier($identifier)
+	{
+		$this->identifier = $identifier;
+	}
+
+	public function getToken()
+	{
+		return $this->token;
+	}
+
+	public function setToken($token)
+	{
+		$this->token = $token;
+	}
+
+	public function getTimeout()
+	{
+		return $this->timeout;
+	}
+
+	public function setTimeout($seconds)
+	{
+		$this->timeout = $seconds;
+	}
+
+	public function getDate()
+	{
+		return $this->date;
+	}
+
+	public function setDate(\DateTime $date)
+	{
+		$this->date = $date;
 	}
 }

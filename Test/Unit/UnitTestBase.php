@@ -2,6 +2,11 @@
 namespace Test\Unit;
 abstract class UnitTestBase extends \PHPUnit_Framework_TestCase
 {
+	public function setUp()
+	{
+		date_default_timezone_set('America/New_York');
+	}
+
 	/**
 	 * Uses reflection to set a value - useful for testing get/set methods
 	 * without having to test each of those implementations. Makes private/protected
