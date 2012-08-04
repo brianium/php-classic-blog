@@ -2,12 +2,18 @@
 namespace Domain\Entities;
 class User
 {
+	protected $id;
 	protected $username;
 	protected $password;
 	protected $identifier;
 	protected $token;
 	protected $timeout;
 	protected $date;
+
+	public function getId()
+	{
+		return $this->id;
+	}
 
 	public function setUsername($username)
 	{

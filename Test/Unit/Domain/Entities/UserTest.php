@@ -12,6 +12,12 @@ class UserTest extends UnitTestBase
 		$this->user = new User();
 	}
 
+	public function test_Get_Id_returns_id_value()
+	{
+		$this->setObjectValue($this->user, 'id', 1);
+		$this->assertEquals(1, $this->user->getId());
+	}
+
 	public function test_Get_Username_should_return_username_value()
 	{
 		$this->setObjectValue($this->user, 'username', 'johnny.test');
