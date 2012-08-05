@@ -94,17 +94,19 @@ class UserTest extends UnitTestBase
 
     public function test_addPost_should_add_to_posts_collection()
     {
-        $this->user->addPost(new Post());
+        $post = new Post();
+        $this->user->addPost($post);
         $posts = $this->getObjectValue($this->user, 'posts');
-        $this->assertEquals(1, count($posts));
+        $this->assertContains($post, $posts);
     }
 
     public function test_getPosts_should_return_posts_collection()
     {
         $collection = new ArrayCollection();
-        $collection[] = new Post();
+        $post = new Post();
+        $collection[] = $post;
         $this->setObjectValue($this->user, 'posts', $collection);
-        $this->assertEquals(1, count($this->user->getPosts()));
+        $this->assertContains($post, $this->user->getPosts());
     }
 }
 

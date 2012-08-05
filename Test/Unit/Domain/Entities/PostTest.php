@@ -1,6 +1,7 @@
 <?php
 namespace Test\Unit\Entities;
 use Domain\Entities\Post;
+use Domain\Entities\User;
 use Domain\Entities\Comment;
 use Test\Unit\UnitTestBase;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -77,16 +78,39 @@ class PostTest extends UnitTestBase
 
     public function test_addComment_should_add_to_comments_collection()
     {
-        $this->post->addComment(new Comment());
+        $comment = new Comment();
+        $this->post->addComment($comment);
         $comments = $this->getObjectValue($this->post, 'comments');
-        $this->assertEquals(1, count($comments));
+        $this->assertContains($comment, $comments);
     }
 
     public function test_getComments_should_return_comments_collection()
     {
+        $comment = new Comment();
         $collection = new ArrayCollection();
-        $collection[] = new Comment();
+        $collection[] = $comment;
         $this->setObjectValue($this->post, 'comments', $collection);
-        $this->assertEquals(1, count($this->post->getComments()));
+        $this->assertContains($comment, $this->post->getComments());
+    }
+
+    public function test_getUser_should_return_user()
+    {
+        $user = new User();
+        $this->setObjectValue($this->post, 'user', $user);
+        $this->assertSame($user, $this->post->getUser());
+    }
+
+    public function test_setUser_should_set_user()
+    {
+        $user = new User();
+        $this->post->setUser($user);
+        $this->assertSame($user, $this->getObjectValue($this->post, 'user'));
+    }
+
+    public function test_setUser_should_add_post_to_user_posts()
+    {
+        $user = new User();
+        $this->post->setUser($user);
+        $this->assertContains($this->post, $user->getPosts());
     }
 }

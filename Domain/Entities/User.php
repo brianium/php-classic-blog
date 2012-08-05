@@ -84,7 +84,7 @@ class User
 
     public function addPost(Post $post)
     {
-        $this->posts = $post;
+        $this->posts[] = $post;
     }
 
     public function getPosts()

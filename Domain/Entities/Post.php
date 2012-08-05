@@ -9,6 +9,7 @@ class Post
     protected $content;
     protected $date;
     protected $comments;
+    protected $user;
 
     public function __construct() 
     {
@@ -68,5 +69,16 @@ class Post
     public function getComments()
     {
         return $this->comments;
+    }
+
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user)
+    {
+        $this->user = $user;
+        $user->addPost($this);
     }
 }
