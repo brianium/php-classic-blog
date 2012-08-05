@@ -4,5 +4,4 @@ guard 'phpunit', :all_on_start => false, :tests_path => 'Test', :cli => '--color
 
   #watch Domain
   watch(%r{^Domain/(.+)\.php}) { |m| "Test/Unit/Domain/#{m[1]}Test.php" }
-
 end
