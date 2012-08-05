@@ -21,6 +21,12 @@ abstract class UnitTestBase extends \PHPUnit_Framework_TestCase
 		$prop->setValue($object, $value);
 	}
 
+	/**
+	 * Load an object to be used as a fixture in testing.
+	 * @param string $fixtureType the type of object to be used as a fixture
+	 * @param string $mustBe used to make sure the fixture is of a given type
+	 * @return mixed $fixture the loaded fixture type
+	 */
 	protected function loadFixture($fixtureType, $mustBe)
 	{
 		$fixture = new $fixtureType();
