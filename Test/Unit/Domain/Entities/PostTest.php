@@ -12,18 +12,16 @@ class PostTest extends UnitTestBase
     public function setUp()
     {
         parent::setUp();
-        $this->post = new Post();
+        $this->post = $this->loadFixture('Test\\Fixtures\\Post\\PostNoUserAndNoComments', 'Domain\\Entities\\Post');
     }
 
     public function test_getId_should_return_id_value()
     {
-        $this->setObjectValue($this->post, 'id', 1);
         $this->assertEquals(1, $this->post->getId());
     }
 
     public function test_getTitle_should_return_title_value()
     {
-        $this->setObjectValue($this->post, 'title', "Unit Testing Is Gnarly");
         $this->assertEquals("Unit Testing Is Gnarly", $this->post->getTitle());
     }
 
@@ -35,7 +33,6 @@ class PostTest extends UnitTestBase
 
     public function test_getExcerpt_should_return_excerpt_value()
     {
-        $this->setObjectValue($this->post, 'excerpt', "A short summary.");
         $this->assertEquals("A short summary.", $this->post->getExcerpt());
     }
 
@@ -47,7 +44,6 @@ class PostTest extends UnitTestBase
 
     public function test_getContent_should_return_content_value()
     {
-        $this->setObjectValue($this->post, 'content', "This is post content");
         $this->assertEquals("This is post content", $this->post->getContent());
     }
 
@@ -60,7 +56,6 @@ class PostTest extends UnitTestBase
     public function test_getDate_should_return_date_value()
     {
         $date = \DateTime::createFromFormat('m/d/Y', '06/20/1986');
-        $this->setObjectValue($this->post, 'date', $date);
         $this->assertEquals($date, $this->post->getDate());
     }
 
