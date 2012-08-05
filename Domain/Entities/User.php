@@ -1,5 +1,6 @@
 <?php
 namespace Domain\Entities;
+use Doctrine\Common\Collections\ArrayCollection;
 class User
 {
 	protected $id;
@@ -9,6 +10,12 @@ class User
 	protected $token;
 	protected $timeout;
 	protected $date;
+	protected $posts;
+
+	public function __construct()
+	{
+		$this->posts = new ArrayCollection();
+	}
 
 	public function getId()
 	{
@@ -73,5 +80,15 @@ class User
 	public function setDate(\DateTime $date)
 	{
 		$this->date = $date;
+	}
+
+	public function addPost(Post $post)
+	{
+		$this->posts = $post;
+	}
+
+	public function getPosts()
+	{
+		return $this->posts;
 	}
 }

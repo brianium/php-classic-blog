@@ -1,4 +1,7 @@
 {
+	"require": {
+		"doctrine/orm":"2.*"
+	},
 	"config" : {
         "vendor-dir" : "vendors"
     }
