@@ -1,6 +1,5 @@
 <?php
 namespace Test\Unit\Entities;
-use Domain\Entities\Post;
 use Domain\Entities\User;
 use Domain\Entities\Comment;
 use Test\Unit\UnitTestBase;
