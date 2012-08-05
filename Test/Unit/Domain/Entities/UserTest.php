@@ -1,6 +1,5 @@
 <?php
 namespace Test\Unit\Entities;
-use Domain\Entities\User;
 use Domain\Entities\Post;
 use Test\Unit\UnitTestBase;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -12,18 +11,16 @@ class UserTest extends UnitTestBase
 	public function setUp()
 	{
 		parent::setUp();
-		$this->user = new User();
+		$this->user = $this->loadFixture('Test\\Fixtures\\User\\UserNoPosts', 'Domain\\Entities\\User');
 	}
 
 	public function test_getId_returns_id_value()
 	{
-		$this->setObjectValue($this->user, 'id', 1);
 		$this->assertEquals(1, $this->user->getId());
 	}
 
 	public function test_getUsername_should_return_username_value()
 	{
-		$this->setObjectValue($this->user, 'username', 'johnny.test');
 		$this->assertEquals("johnny.test", $this->user->getUsername());
 	}
 
@@ -35,7 +32,6 @@ class UserTest extends UnitTestBase
 
 	public function test_getPassword_should_return_password_value()
 	{
-		$this->setObjectValue($this->user, 'password', 'password');
 		$this->assertEquals('password', $this->user->getPassword());
 	}
 
@@ -47,7 +43,6 @@ class UserTest extends UnitTestBase
 
 	public function test_getIdentifier_should_return_identifier_value()
 	{
-		$this->setObjectValue($this->user, 'identifier', 'some_id');
 		$this->assertEquals('some_id', $this->user->getIdentifier());
 	}
 
@@ -59,7 +54,6 @@ class UserTest extends UnitTestBase
 
 	public function test_getToken_should_return_token_value()
 	{
-		$this->setObjectValue($this->user, 'token', 'some_token');
 		$this->assertEquals('some_token', $this->user->getToken());
 	}
 
@@ -71,20 +65,18 @@ class UserTest extends UnitTestBase
 
 	public function test_getTimeout_should_return_timeout_value()
 	{
-		$this->setObjectValue($this->user, 'timeout', 10);
 		$this->assertEquals(10, $this->user->getTimeout());
 	}
 
 	public function test_setTimeout_should_set_timeout_value()
 	{
-		$this->user->setTimeout(10);
-		$this->assertEquals(10, $this->getObjectValue($this->user, 'timeout'));
+		$this->user->setTimeout(15);
+		$this->assertEquals(15, $this->getObjectValue($this->user, 'timeout'));
 	}
 
 	public function test_getDate_should_return_date_value()
 	{
-		$date = new \DateTime('now');
-		$this->setObjectValue($this->user, 'date', $date);
+		$date = \DateTime::createFromFormat('m/d/Y', '06/20/1986');
 		$this->assertEquals($date, $this->user->getDate());
 	}
 

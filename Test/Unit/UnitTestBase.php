@@ -21,6 +21,16 @@ abstract class UnitTestBase extends \PHPUnit_Framework_TestCase
 		$prop->setValue($object, $value);
 	}
 
+	protected function loadFixture($fixtureType, $mustBe)
+	{
+		$fixture = new $fixtureType();
+
+		if(!is_a($fixture, $mustBe))
+			throw new \Exception("$fixtureType must be of type $mustBe");
+
+		return $fixture;
+	}
+
 	/**
 	 * Uses reflection to fetch a value from an object
 	 * Makes private/protected properties accessible
