@@ -1,7 +1,7 @@
 <?php
 $namespaces = array(
-	'Domain',
-	'Test'
+    'Domain',
+    'Test'
 );
 
 return array_fill_keys($namespaces,$root); 

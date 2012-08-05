@@ -3,92 +3,92 @@ namespace Domain\Entities;
 use Doctrine\Common\Collections\ArrayCollection;
 class User
 {
-	protected $id;
-	protected $username;
-	protected $password;
-	protected $identifier;
-	protected $token;
-	protected $timeout;
-	protected $date;
-	protected $posts;
+    protected $id;
+    protected $username;
+    protected $password;
+    protected $identifier;
+    protected $token;
+    protected $timeout;
+    protected $date;
+    protected $posts;
 
-	public function __construct()
-	{
-		$this->posts = new ArrayCollection();
-	}
+    public function __construct()
+    {
+        $this->posts = new ArrayCollection();
+    }
 
-	public function getId()
-	{
-		return $this->id;
-	}
+    public function getId()
+    {
+        return $this->id;
+    }
 
-	public function setUsername($username)
-	{
-		$this->username = $username;
-	}
+    public function setUsername($username)
+    {
+        $this->username = $username;
+    }
 
-	public function getUsername()
-	{
-		return $this->username;
-	}
+    public function getUsername()
+    {
+        return $this->username;
+    }
 
-	public function setPassword($password)
-	{
-		$this->password = $password;
-	}
+    public function setPassword($password)
+    {
+        $this->password = $password;
+    }
 
-	public function getPassword()
-	{
-		return $this->password;
-	}
+    public function getPassword()
+    {
+        return $this->password;
+    }
 
-	public function getIdentifier()
-	{
-		return $this->identifier;
-	}
+    public function getIdentifier()
+    {
+        return $this->identifier;
+    }
 
-	public function setIdentifier($identifier)
-	{
-		$this->identifier = $identifier;
-	}
+    public function setIdentifier($identifier)
+    {
+        $this->identifier = $identifier;
+    }
 
-	public function getToken()
-	{
-		return $this->token;
-	}
+    public function getToken()
+    {
+        return $this->token;
+    }
 
-	public function setToken($token)
-	{
-		$this->token = $token;
-	}
+    public function setToken($token)
+    {
+        $this->token = $token;
+    }
 
-	public function getTimeout()
-	{
-		return $this->timeout;
-	}
+    public function getTimeout()
+    {
+        return $this->timeout;
+    }
 
-	public function setTimeout($seconds)
-	{
-		$this->timeout = $seconds;
-	}
+    public function setTimeout($seconds)
+    {
+        $this->timeout = $seconds;
+    }
 
-	public function getDate()
-	{
-		return $this->date;
-	}
+    public function getDate()
+    {
+        return $this->date;
+    }
 
-	public function setDate(\DateTime $date)
-	{
-		$this->date = $date;
-	}
+    public function setDate(\DateTime $date)
+    {
+        $this->date = $date;
+    }
 
-	public function addPost(Post $post)
-	{
-		$this->posts = $post;
-	}
+    public function addPost(Post $post)
+    {
+        $this->posts = $post;
+    }
 
-	public function getPosts()
-	{
-		return $this->posts;
-	}
+    public function getPosts()
+    {
+        return $this->posts;
+    }
 }

@@ -1,6 +1,6 @@
 <?php
 if(!defined('DS'))
-	define('DS', DIRECTORY_SEPARATOR);
+    define('DS', DIRECTORY_SEPARATOR);
 
 $root = dirname(dirname(__FILE__));
 $vendors = $root . DS . 'vendors';
@@ -16,6 +16,6 @@ $loader = ComposerAutoloaderInit::getLoader();
 
 //load application namespaces
 foreach($namespaces as $namespace => $path) {
-	$loader->add($namespace, $path);
+    $loader->add($namespace, $path);
 }
 

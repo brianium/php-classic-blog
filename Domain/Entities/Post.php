@@ -2,5 +2,5 @@
 namespace Domain\Entities;
 class Post
 {
-	
+    
 }
