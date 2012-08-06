@@ -12,19 +12,16 @@ class CommentTest extends UnitTestBase
     public function setUp()
     {
         parent::setUp();
-        $this->comment = new Comment();
-        $this->commenter = new Commenter("Brian Scaturro", "scaturrob@gmail.com", "http://brianscaturro.com");
+        $this->comment = $this->loadFixture('Test\\Fixtures\\Comment\\CommentNoPost', 'Domain\\Entities\\Comment');
     }
 
     public function test_getId_should_return_id()
     {
-        $this->setObjectValue($this->comment, 'id', 1);
         $this->assertEquals(1, $this->comment->getId());
     }
 
     public function test_getText_should_return_text()
     {
-        $this->setObjectValue($this->comment, 'text', 'Great post!');
         $this->assertEquals('Great post!', $this->comment->getText());
     }
 
@@ -37,7 +34,6 @@ class CommentTest extends UnitTestBase
     public function test_getDate_should_return_date()
     {
         $date = \DateTime::createFromFormat('m/d/Y', '06/20/1986');
-        $this->setObjectValue($this->comment, 'date', $date);
         $this->assertEquals($date, $this->comment->getDate());
     }
 
@@ -50,11 +46,8 @@ class CommentTest extends UnitTestBase
 
     public function test_getCommenter_should_return_commenter_value_object()
     {
-        $this->setObjectValue($this->comment, 'commenter_name', $this->commenter->getName());
-        $this->setObjectValue($this->comment, 'commenter_email', $this->commenter->getEmail());
-        $this->setObjectValue($this->comment, 'commenter_url', $this->commenter->getUrl());
-
-        $this->assertEquals($this->commenter, $this->comment->getCommenter());
+        $expected = new Commenter('Brian Scaturro', 'scaturrob@gmail.com', 'http://brianscaturro.com');
+        $this->assertEquals($expected, $this->comment->getCommenter());
     }
 
     public function test_setCommenter_should_set_commenter_name_to_Commenter_name()
