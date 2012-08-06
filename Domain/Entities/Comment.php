@@ -1,11 +1,13 @@
 <?php
 namespace Domain\Entities;
 use Domain\Commenter;
+use Domain\Entities\Post;
 class Comment
 {
 	protected $id;
 	protected $text;
 	protected $date;
+	protected $post;
 
 	//Commenter value object properties
 	protected $commenter_name;
@@ -47,5 +49,16 @@ class Comment
 		$this->commenter_name = $commenter->getName();
 		$this->commenter_email = $commenter->getEmail();
 		$this->commenter_url = $commenter->getUrl();
+	}
+
+	public function getPost()
+	{
+		return $this->post;
+	}
+
+	public function setPost(Post $post)
+	{
+		$post->addComment($this);
+		$this->post = $post;
 	}
 }

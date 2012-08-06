@@ -1,6 +1,7 @@
 <?php
 namespace Test\Unit\Entities;
 use Domain\Entities\Comment;
+use Domain\Entities\Post;
 use Test\Unit\UnitTestBase;
 use Domain\Commenter;
 class CommentTest extends UnitTestBase
@@ -69,6 +70,27 @@ class CommentTest extends UnitTestBase
     public function test_setCommenter_should_set_commenter_url_to_Commenter_url()
     {
         $this->assertEquals($this->setCommenter()->getUrl(), $this->getObjectValue($this->comment, 'commenter_url'));
+    }
+
+    public function test_getPost_should_return_post()
+    {
+        $post = new Post();
+        $this->setObjectValue($this->comment, 'post', $post);
+        $this->assertSame($post, $this->comment->getPost());
+    }
+
+    public function test_setPost_should_set_post()
+    {
+        $post = new Post();
+        $this->comment->setPost($post);
+        $this->assertSame($post, $this->getObjectValue($this->comment, 'post'));
+    }
+
+    public function test_setPost_should_add_comment_to_post_comments()
+    {
+        $post = new Post();
+        $this->comment->setPost($post);
+        $this->assertContains($this->comment, $post->getComments());
     }
 
     protected function setCommenter()
