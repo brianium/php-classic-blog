@@ -1,2 +1,2 @@
 #!/bin/bash
-phpunit --bootstrap Test/bootstrap.php --color Test/
+phpunit --bootstrap src/bootstrap.php --color src/Test/
