@@ -41,4 +41,10 @@ class UserAuthenticator
     {
         $this->user->setIdentifier($this->hasher->hash($this->user->getUsername()));
     }
+
+    public function refreshToken()
+    {
+        $token = md5(uniqid(rand(), true));
+        $this->user->setToken($token);
+    }
 }

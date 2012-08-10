@@ -102,6 +102,15 @@ class UserAuthenticatorTest extends UnitTestBase
         $this->assertNotEquals($currentId, $this->user->getIdentifier());
     }
 
+    public function test_refreshToken_sets_user_token_to_different_value()
+    {
+        $currentToken = $this->user->getToken();
+
+        $this->authenticator->refreshToken();
+
+        $this->assertNotEquals($currentToken, $this->user->getToken());
+    }
+
     protected function getStubbedHasher()
     {
         return $this->hasher->expects($this->once())
