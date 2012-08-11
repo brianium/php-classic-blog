@@ -2,6 +2,8 @@
 if(!defined('DS'))
     define('DS', DIRECTORY_SEPARATOR);
 
+define('APP_SRC', dirname(__FILE__));
+
 $root = dirname(dirname(__FILE__));
 $lib = $root . DS . 'lib';
 
@@ -12,7 +14,7 @@ require_once $lib . DS . 'autoload.php';
 $loader = ComposerAutoloaderInit::getLoader();
 
 //load application namespaces
-$namespaces = array_fill_keys(['Domain', 'Test'], dirname(__FILE__));
+$namespaces = array_fill_keys(['Domain', 'Test'], APP_SRC);
 foreach($namespaces as $namespace => $path) {
     $loader->add($namespace, $path);
 }

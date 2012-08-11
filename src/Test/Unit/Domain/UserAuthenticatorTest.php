@@ -1,9 +1,9 @@
 <?php
 namespace Test\Unit\Domain;
-use Test\Unit\UnitTestBase;
+use Test\TestBase;
 use Domain\UserAuthenticator;
 use Domain\PasswordHasher;
-class UserAuthenticatorTest extends UnitTestBase
+class UserAuthenticatorTest extends TestBase
 {
     protected $user;
     protected $repo;

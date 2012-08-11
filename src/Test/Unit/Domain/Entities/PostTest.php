@@ -2,9 +2,9 @@
 namespace Test\Unit\Entities;
 use Domain\Entities\User;
 use Domain\Entities\Comment;
-use Test\Unit\UnitTestBase;
+use Test\TestBase;
 use Doctrine\Common\Collections\ArrayCollection;
-class PostTest extends UnitTestBase
+class PostTest extends TestBase
 {
     protected $post;
 

@@ -2,9 +2,9 @@
 namespace Test\Unit\Entities;
 use Domain\Entities\Comment;
 use Domain\Entities\Post;
-use Test\Unit\UnitTestBase;
+use Test\TestBase;
 use Domain\Commenter;
-class CommentTest extends UnitTestBase
+class CommentTest extends TestBase
 {
     protected $comment;
     protected $commenter;

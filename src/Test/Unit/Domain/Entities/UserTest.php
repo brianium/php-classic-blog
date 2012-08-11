@@ -1,10 +1,10 @@
 <?php
 namespace Test\Unit\Entities;
 use Domain\Entities\Post;
-use Test\Unit\UnitTestBase;
+use Test\TestBase;
 use Doctrine\Common\Collections\ArrayCollection;
 
-class UserTest extends UnitTestBase
+class UserTest extends TestBase
 {
     protected $user;
 

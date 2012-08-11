@@ -1,8 +1,8 @@
 <?php
 namespace Test\Unit\Domain;
 use Domain\CommentSanitizer;
-use Test\Unit\UnitTestBase;
-class CommentSanitizerTest extends UnitTestBase
+use Test\TestBase;
+class CommentSanitizerTest extends TestBase
 {
     protected $comment;
 

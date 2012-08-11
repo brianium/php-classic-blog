@@ -1,8 +1,8 @@
 <?php
 namespace Test\Unit\Domain;
 use Domain\PasswordHasher;
-use Test\Unit\UnitTestBase;
-class PasswordHasherTest extends UnitTestBase
+use Test\TestBase;
+class PasswordHasherTest extends TestBase
 {
     protected $hasher;
 
