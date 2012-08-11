@@ -12,6 +12,5 @@ class NewUser extends User
         $this->identifier = 'id.test';
         $this->token = 'token.test';
         $this->timeout = 10;
-        $this->date = \DateTime::createFromFormat('m/d/Y', '06/20/1986');
     }
 }

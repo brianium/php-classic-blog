@@ -32,4 +32,26 @@ class UserRepository implements Repositories\UserRepository
     {
         $this->manager->persist($user);
     }
+
+    public function get($id)
+    {
+        return $this->manager->find('Domain\\Entities\\User', $id);
+    }
+
+    public function getAll()
+    {
+        return $this->manager->getRepository('Domain\\Entities\\User')
+                    ->findAll();
+    }
+
+    public function getBy($conditions)
+    {
+        return $this->manager->getRepository('Domain\\Entities\\User')
+                             ->findBy($conditions);
+    }
+
+    public function delete(User $user)
+    {
+        $this->manager->remove($user);
+    }
 }
