@@ -5,4 +5,5 @@ interface UserRepository
 {
 	function getByUsername($username);
 	function contains(User $user);
+    function store(User $user);
 }

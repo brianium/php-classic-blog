@@ -14,7 +14,7 @@ require_once $lib . DS . 'autoload.php';
 $loader = ComposerAutoloaderInit::getLoader();
 
 //load application namespaces
-$namespaces = array_fill_keys(['Domain', 'Test'], APP_SRC);
+$namespaces = array_fill_keys(['Domain', 'Infrastructure', 'Test'], APP_SRC);
 foreach($namespaces as $namespace => $path) {
     $loader->add($namespace, $path);
 }
