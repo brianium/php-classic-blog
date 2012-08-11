@@ -52,13 +52,22 @@ class UserRepositoryTest extends TestBase
         $this->assertEquals(1, $q->getSingleScalarResult());
     }
 
+    public function test_contains_should_return_true_when_user_saved()
+    {
+        $this->storeUser();
+        $this->assertTrue($this->repo->contains($this->user));
+    }
+
+    public function test_contains_should_return_false_when_user_not_saved()
+    {
+        $this->assertFalse($this->repo->contains($this->user));
+    }
+
     public function test_should_store_username()
     {
         $this->storeUser();
-        $q = $this->query('SELECT u FROM Domain\\Entities\\User u WHERE u.username = ?1');
-        $q->setParameter(1, $this->fixture->getUsername());
 
-        $user = $q->getResult()[0];
+        $user = $this->getUser(['username' => $this->fixture->getUsername()]);
 
         $this->assertEquals($this->fixture->getUsername(), $user->getUsername());
     }
@@ -86,21 +95,26 @@ class UserRepositoryTest extends TestBase
     public function test_should_store_password()
     {
         $this->storeUser();
-        $q = $this->query('SELECT u FROM Domain\\Entities\\User u WHERE u.password = ?1');
-        $q->setParameter(1, $this->fixture->getPassword());
 
-        $user = $q->getResult()[0];
+        $user = $this->getUser(['password' => $this->fixture->getPassword()]);
 
         $this->assertEquals($this->fixture->getPassword(), $user->getPassword());
+    }
+
+    /**
+     * @expectedException \PDOException
+     */
+    public function test_should_not_store_null_password()
+    {
+        $this->user->setPassword(null);
+        $this->storeUser();
     }
 
     public function test_should_store_identifier()
     {
         $this->storeUser();
-        $q = $this->query('SELECT u FROM Domain\\Entities\\User u where u.identifier = ?1');
-        $q->setParameter(1, $this->fixture->getIdentifier());
 
-        $user = $q->getResult()[0];
+        $user = $this->getUser(['identifier' => $this->fixture->getIdentifier()]);
 
         $this->assertEquals($this->fixture->getIdentifier(), $user->getIdentifier());
     }
@@ -128,10 +142,8 @@ class UserRepositoryTest extends TestBase
     public function test_should_store_token()
     {
         $this->storeUser();
-        $q = $this->query('SELECT u FROM Domain\\Entities\\User u WHERE u.token = ?1');
-        $q->setParameter(1, $this->fixture->getToken());
 
-        $user = $q->getResult()[0];
+        $user = $this->getUser(['token' => $this->fixture->getToken()]);
 
         $this->assertEquals($this->fixture->getToken(), $user->getToken());
     }
@@ -156,30 +168,31 @@ class UserRepositoryTest extends TestBase
         $this->em->flush();
     }
 
-    /**
-     * @expectedException \PDOException
-     */
-    public function test_should_not_store_null_password()
-    {
-        $this->user->setPassword(null);
-        $this->storeUser();
-    }
-
     public function test_should_store_timeout()
     {
         $this->storeUser();
+
         $user = $this->getUser(['timeout' => $this->fixture->getTimeout()]);
+
+        $this->assertEquals($this->fixture->getTimeout(), $user->getTimeout());
     }
 
-    public function test_contains_should_return_true_when_user_saved()
+    /**
+     * @expectedException \PDOException
+     */
+    public function test_should_not_store_null_timeout()
+    {
+        $this->user->setTimeout(null);
+        $this->storeUser();
+    }
+
+    public function test_should_store_date()
     {
         $this->storeUser();
-        $this->assertTrue($this->repo->contains($this->user));
-    }
 
-    public function test_contains_should_return_false_when_user_not_saved()
-    {
-        $this->assertFalse($this->repo->contains($this->user));
+        $user = $this->getUser(['date' => $this->fixture->getDate()]);
+
+        $this->assertEquals($this->fixture->getDate(), $user->getDate());
     }
 
     protected function storeUser()
@@ -190,19 +203,26 @@ class UserRepositoryTest extends TestBase
 
     protected function getUser($conditions)
     {
+        return $this->getQueryResult('Domain\\Entities\\User', $conditions)[0];
+    }
+
+    protected function getQueryResult($type, $conditions)
+    {
+        $reflectionClass = new \ReflectionClass($type);
         $q = $this->em->createQuery();
-        $dql = 'SELECT u FROM Domain\\Entities\\User u WHERE';
+        $alias = strtolower($reflectionClass->getShortName());
+        $dql = "SELECT $alias FROM $type $alias WHERE";
         $i = 1;
         foreach($conditions as $key => $value) {
-            $dql .= " u.$key = ?$i";
+            $dql .= " $alias.$key = ?$i";
             $q->setParameter($i, $value);
             if($i < sizeof($conditions))
                 $dql .= ' AND';
             $i++;
         }
         $q->setDql($dql);
-        return $q->getResult()[0];
-    } 
+        return $q->getResult();
+    }
 
     /**
      * Shortcut to call flush on EntityManager

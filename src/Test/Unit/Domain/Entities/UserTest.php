@@ -1,5 +1,6 @@
 <?php
 namespace Test\Unit\Entities;
+use Domain\Entities\User;
 use Domain\Entities\Post;
 use Test\TestBase;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -85,6 +86,13 @@ class UserTest extends TestBase
         $date = new \DateTime('now');
         $this->user->setDate($date);
         $this->assertEquals($date, $this->getObjectValue($this->user, 'date'));
+    }
+
+    public function test_date_should_default_to_now()
+    {
+        $now = new \DateTime('now');
+        $user = new User();
+        $this->assertEquals($now, $user->getDate());
     }
 
     public function test_posts_should_be_doctrine_array_collection()

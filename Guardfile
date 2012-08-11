@@ -3,5 +3,5 @@ guard 'phpunit', :all_on_start => false, :tests_path => 'src/Test', :cli => '--c
   watch(%r{^.+Test\.php$})
 
   #watch Domain
-  watch(%r{^Domain/(.+)\.php}) { |m| "Test/Unit/Domain/#{m[1]}Test.php" }
+  watch(%r{^src/Domain/(.+)\.php}) { |m| "src/Test/Unit/Domain/#{m[1]}Test\.php" }
 end

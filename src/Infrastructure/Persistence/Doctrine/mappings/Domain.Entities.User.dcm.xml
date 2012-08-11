@@ -11,6 +11,8 @@
         <field name="password" type="string" length="100" nullable="false" />
         <field name="identifier" type="string" length="100" nullable="false" unique="true" />
         <field name="token" type="string" length="100" nullable="false" unique="true" />
+        <field name="timeout" type="integer" nullable="false" />
+        <field name="date" type="datetime" nullable="false" />
 
     </entity>
 </doctrine-mapping>
