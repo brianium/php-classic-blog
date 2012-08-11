@@ -19,7 +19,13 @@ class UserRepository implements Repositories\UserRepository
 
     public function contains(User $user)
     {
+        if(is_null($user->getId())) return false;
+        
+        $q = $this->manager->createQuery('SELECT COUNT(u.id) FROM Domain\\Entities\\User u WHERE u.id = ?1');
 
+        $q->setParameter(1, $user->getId());
+
+        return $q->getSingleScalarResult() > 0;
     }
 
     public function store(User $user)
