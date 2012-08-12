@@ -2,9 +2,8 @@
 namespace Domain\Entities;
 use Domain\Commenter;
 use Domain\Entities\Post;
-class Comment
+class Comment extends Entity
 {
-    protected $id;
     protected $text;
     protected $date;
     protected $post;
@@ -13,11 +12,6 @@ class Comment
     protected $commenter_name;
     protected $commenter_email;
     protected $commenter_url;
-
-    public function getId()
-    {
-        return $this->id;
-    }
 
     public function getText()
     {

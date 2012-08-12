@@ -1,9 +1,8 @@
 <?php
 namespace Domain\Entities;
 use Doctrine\Common\Collections\ArrayCollection;
-class User
+class User extends Entity
 {
-    protected $id;
     protected $username;
     protected $password;
     protected $identifier;
@@ -16,11 +15,6 @@ class User
     {
         $this->posts = new ArrayCollection();
         $this->date = new \DateTime('now');
-    }
-
-    public function getId()
-    {
-        return $this->id;
     }
 
     public function setUsername($username)

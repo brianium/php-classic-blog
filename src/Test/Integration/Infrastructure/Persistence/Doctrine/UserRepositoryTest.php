@@ -274,12 +274,18 @@ class UserRepositoryTest extends RepositoryTestBase
         $this->assertNotNull($user);
     }
 
+    /**
+     * Stores user via repository
+     */
     protected function storeUser()
     {
         $this->repo->store($this->user);
         $this->flush();
     }
 
+    /**
+     * Stores user via Doctrine EntityManager
+     */
     protected function persistUser()
     {
         $this->doctrinePersist($this->user);

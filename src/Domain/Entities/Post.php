@@ -1,9 +1,8 @@
 <?php
 namespace Domain\Entities;
 use Doctrine\Common\Collections\ArrayCollection;
-class Post
+class Post extends Entity
 {
-    protected $id;
     protected $title;
     protected $excerpt;
     protected $content;
@@ -14,11 +13,6 @@ class Post
     public function __construct() 
     {
         $this->comments = new ArrayCollection();
-    }
-
-    public function getId()
-    {
-        return $this->id;
     }
 
     public function getTitle()
