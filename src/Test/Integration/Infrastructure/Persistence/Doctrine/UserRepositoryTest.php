@@ -1,17 +1,9 @@
 <?php
 namespace Test\Integration\Infrastructure\Persistence\Doctrine;
 use Domain\Entities\User;
-use Doctrine\ORM\Tools\Setup;
-use Doctrine\DBAL\DriverManager;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Tools\SchemaTool;
-use Test\TestBase;
 use Infrastructure\Persistence\Doctrine\UserRepository;
-class UserRepositoryTest extends TestBase
+class UserRepositoryTest extends RepositoryTestBase
 {
-    protected $manager;
-    protected $classes;
-    protected $tool;
     protected $fixture;
     protected $user;
     protected $repo;
@@ -19,21 +11,6 @@ class UserRepositoryTest extends TestBase
     public function setUp()
     {
         parent::setUp();
-        $paths = [APP_SRC . DS . 'Infrastructure' . DS . 'Persistence' . DS . 'Doctrine' . DS . 'mappings'];
-        $isDevMode = true;
-        $dbParams = [
-            'user' => 'root',
-            'driver' => 'pdo_sqlite',
-            'dbname' => 'blog.test',
-            'memory' => true
-        ];
-        $config = Setup::createXMLMetadataConfiguration($paths, $isDevMode);
-        $this->manager = EntityManager::create($dbParams, $config);
-        $this->tool = new SchemaTool($this->manager);
-        $this->classes = [
-            $this->manager->getClassMetadata('Domain\\Entities\\User')
-        ];
-        $this->tool->createSchema($this->classes);
         $this->fixture = $this->loadFixture('Test\\Fixtures\\User\\NewUser', 'Domain\\Entities\\User');
         $this->user = $this->fixture->getAsUser();
         $this->repo = new UserRepository($this->manager);
@@ -311,33 +288,5 @@ class UserRepositoryTest extends TestBase
     protected function getUser($conditions)
     {
         return $this->findBy('Domain\\Entities\\User', $conditions)[0];
-    }
-
-    protected function doctrinePersist($object)
-    {
-        $this->manager->persist($object);
-        $this->flush();
-    }
-
-    protected function findBy($type, $conditions)
-    {
-        return $this->manager->getRepository($type)
-                      ->findBy($conditions);
-    }
-
-    /**
-     * Shortcut to call flush on EntityManager
-     */
-    protected function flush()
-    {
-        $this->manager->flush();
-    }
-
-    /**
-     * Shortcut for createQuery on EntityManager
-     */
-    protected function query($dql)
-    {
-        return $this->manager->createQuery($dql);
     }
 }
