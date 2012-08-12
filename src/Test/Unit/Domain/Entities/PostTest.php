@@ -1,6 +1,7 @@
 <?php
 namespace Test\Unit\Entities;
 use Domain\Entities\User;
+use Domain\Entities\Post;
 use Domain\Entities\Comment;
 use Test\TestBase;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -63,6 +64,13 @@ class PostTest extends TestBase
         $date = new \DateTime('now');
         $this->post->setDate($date);
         $this->assertEquals($date, $this->getObjectValue($this->post, 'date'));
+    }
+
+    public function test_date_should_default_to_now()
+    {
+        $now = new \DateTime('now');
+        $post = new Post();
+        $this->assertEquals($now, $post->getDate());
     }
 
     public function test_comments_is_Doctrine_ArrayCollection()

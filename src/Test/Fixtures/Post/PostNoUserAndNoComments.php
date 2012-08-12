@@ -3,6 +3,7 @@ namespace Test\Fixtures\Post;
 use Domain\Entities\Post;
 class PostNoUserAndNoComments extends Post
 {
+    use PostFixture;
     public function __construct()
     {
         parent::__construct();

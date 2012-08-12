@@ -12,6 +12,7 @@ class Post extends Entity
 
     public function __construct() 
     {
+        $this->date = new \DateTime('now');
         $this->comments = new ArrayCollection();
     }
 

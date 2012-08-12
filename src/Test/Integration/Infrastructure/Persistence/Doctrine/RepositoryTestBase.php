@@ -7,7 +7,7 @@ use Doctrine\ORM\Tools\SchemaTool;
 class RepositoryTestBase extends TestBase
 {
     protected $manager;
-    protected $classes = ['User'];
+    protected $classes = ['User', 'Post'];
     protected $tool;
     protected $repo;
 

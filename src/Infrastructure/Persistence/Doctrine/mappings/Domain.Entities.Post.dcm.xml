@@ -1,0 +1,16 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                   https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+    <entity name="Domain\Entities\Post" table="posts">
+
+        <id name="id" type="integer">
+            <generator strategy="AUTO" />
+        </id>
+
+        <field name="title" type="string" length="100" />
+        <field name="excerpt" type="string" length="255" nullable="true" />
+        <field name="content" type="text" />
+        <field name="date" type="datetime" nullable="false" />
+
+    </entity>
+</doctrine-mapping>
