@@ -1,7 +1,6 @@
 <?php
 namespace Test\Integration\Infrastructure\Persistence\Doctrine;
 use Domain\Entities\User;
-use Infrastructure\Persistence\Doctrine\UserRepository;
 class UserRepositoryTest extends RepositoryTestBase
 {
     protected $fixture;
@@ -12,11 +11,6 @@ class UserRepositoryTest extends RepositoryTestBase
         parent::setUp();
         $this->fixture = $this->loadFixture('Test\\Fixtures\\User\\NewUser', 'Domain\\Entities\\User');
         $this->user = $this->fixture->getAsUser();
-    }
-
-    public function tearDown()
-    {
-        $this->tool->dropSchema($this->classes);
     }
 
     public function test_should_store_new_User()

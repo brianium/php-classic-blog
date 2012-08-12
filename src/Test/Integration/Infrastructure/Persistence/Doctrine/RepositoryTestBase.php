@@ -30,6 +30,11 @@ class RepositoryTestBase extends TestBase
         $this->repo = $this->getRepo();
     }
 
+    public function tearDown()
+    {
+        $this->tool->dropSchema($this->classes);
+    }
+
     protected function doctrinePersist($object)
     {
         $this->manager->persist($object);
