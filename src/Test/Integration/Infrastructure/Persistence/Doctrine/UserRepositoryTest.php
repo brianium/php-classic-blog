@@ -6,14 +6,12 @@ class UserRepositoryTest extends RepositoryTestBase
 {
     protected $fixture;
     protected $user;
-    protected $repo;
 
     public function setUp()
     {
         parent::setUp();
         $this->fixture = $this->loadFixture('Test\\Fixtures\\User\\NewUser', 'Domain\\Entities\\User');
         $this->user = $this->fixture->getAsUser();
-        $this->repo = new UserRepository($this->manager);
     }
 
     public function tearDown()

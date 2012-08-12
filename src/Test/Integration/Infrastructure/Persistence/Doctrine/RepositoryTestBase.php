@@ -9,6 +9,7 @@ class RepositoryTestBase extends TestBase
     protected $manager;
     protected $classes = ['User'];
     protected $tool;
+    protected $repo;
 
     public function setUp()
     {
@@ -26,6 +27,7 @@ class RepositoryTestBase extends TestBase
         $this->tool = new SchemaTool($this->manager);
         $this->buildClassMeta();
         $this->tool->createSchema($this->classes);
+        $this->repo = $this->getRepo();
     }
 
     protected function doctrinePersist($object)
@@ -61,5 +63,13 @@ class RepositoryTestBase extends TestBase
         $this->classes = array_map(function($entity){
             return $this->manager->getClassMetadata('Domain\\Entities\\' . $entity);
         }, $this->classes);
+    }
+
+    private function getRepo()
+    {
+        $reflection = new \ReflectionClass(get_class($this));
+        $test = $reflection->getShortName();
+        $repoClass = 'Infrastructure\\Persistence\\Doctrine\\' . str_replace('Test', '', $test);
+        return new $repoClass($this->manager);
     }
 }
