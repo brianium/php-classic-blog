@@ -14,7 +14,8 @@ class UserRepository implements Repositories\UserRepository
 
     public function getByUsername($username)
     {
-
+        return $this->manager->getRepository('Domain\\Entities\\User')
+                             ->findOneBy(['username' => $username]);
     }
 
     public function contains(User $user)

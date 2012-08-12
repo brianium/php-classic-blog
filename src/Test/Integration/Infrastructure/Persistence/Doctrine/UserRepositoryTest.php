@@ -9,7 +9,7 @@ use Test\TestBase;
 use Infrastructure\Persistence\Doctrine\UserRepository;
 class UserRepositoryTest extends TestBase
 {
-    protected $em;
+    protected $manager;
     protected $classes;
     protected $tool;
     protected $fixture;
@@ -28,15 +28,15 @@ class UserRepositoryTest extends TestBase
             'memory' => true
         ];
         $config = Setup::createXMLMetadataConfiguration($paths, $isDevMode);
-        $this->em = EntityManager::create($dbParams, $config);
-        $this->tool = new SchemaTool($this->em);
+        $this->manager = EntityManager::create($dbParams, $config);
+        $this->tool = new SchemaTool($this->manager);
         $this->classes = [
-            $this->em->getClassMetadata('Domain\\Entities\\User')
+            $this->manager->getClassMetadata('Domain\\Entities\\User')
         ];
         $this->tool->createSchema($this->classes);
         $this->fixture = $this->loadFixture('Test\\Fixtures\\User\\NewUser', 'Domain\\Entities\\User');
         $this->user = $this->fixture->getAsUser();
-        $this->repo = new UserRepository($this->em);
+        $this->repo = new UserRepository($this->manager);
     }
 
     public function tearDown()
@@ -166,7 +166,7 @@ class UserRepositoryTest extends TestBase
         $this->storeUser();
         $other = $this->fixture->getAsUser();
         $this->repo->store($other);
-        $this->em->flush();
+        $this->manager->flush();
     }
 
     public function test_should_store_timeout()
@@ -207,8 +207,7 @@ class UserRepositoryTest extends TestBase
 
     public function test_should_get_user_by_id()
     {
-        $this->em->persist($this->user);
-        $this->flush();
+        $this->persistUser();
 
         $user = $this->repo->get(1);
 
@@ -224,12 +223,12 @@ class UserRepositoryTest extends TestBase
 
     public function test_getAll_should_return_all_users()
     {
-        $this->em->persist($this->user);
+        $this->manager->persist($this->user);
         $other = $this->fixture->getAsUser();
         $other->setUsername("Jennie Test");
         $other->setIdentifier("jennie.test");
         $other->setToken("jennie.token");
-        $this->em->persist($other);
+        $this->manager->persist($other);
         $this->flush();
 
         $all = $this->repo->getAll();
@@ -246,23 +245,56 @@ class UserRepositoryTest extends TestBase
 
     public function test_getBy_should_return_array_matching_condition()
     {
-        $this->em->persist($this->user);
-        $this->flush();
+        $this->persistUser();
 
         $users = $this->repo->getBy(['username' => $this->fixture->getUsername()]);
 
         $this->assertEquals($this->user, $users[0]);
     }
 
+    public function test_getBy_should_return_empty_array_when_no_match()
+    {
+        $users = $this->repo->getBy(['id' => 99]);
+
+        $this->assertEmpty($users);
+    }
+
+    public function test_getByUsername_should_return_single_user()
+    {
+        $this->persistUser();
+
+        $user = $this->repo->getByUsername($this->fixture->getUsername());
+
+        $this->assertEquals($this->user, $user);
+    }
+
+    public function test_getByUsername_should_return_null_if_user_does_not_exist()
+    {
+        $user = $this->repo->getByUsername('doesnotexist');
+
+        $this->assertNull($user);
+    }
+
     public function test_delete_should_remove_user()
     {
-        $this->em->persist($this->user);
+        $this->manager->persist($this->user);
         $this->flush();
 
         $this->repo->delete($this->user);
         $this->flush();
 
-        $this->assertEmpty($this->em->getRepository('Domain\\Entities\\User')->findAll());
+        $this->assertEmpty($this->manager->getRepository('Domain\\Entities\\User')->findAll());
+    }
+
+    public function test_flush_should_update_user()
+    {
+        $this->persistUser();
+        $this->user->setUsername("Brian Scaturro");
+
+        $this->flush();
+
+        $user = $this->getUser(['username' => 'Brian Scaturro']);
+        $this->assertNotNull($user);
     }
 
     protected function storeUser()
@@ -271,27 +303,26 @@ class UserRepositoryTest extends TestBase
         $this->flush();
     }
 
-    protected function getUser($conditions)
+    protected function persistUser()
     {
-        return $this->getQueryResult('Domain\\Entities\\User', $conditions)[0];
+        $this->doctrinePersist($this->user);
     }
 
-    protected function getQueryResult($type, $conditions)
+    protected function getUser($conditions)
     {
-        $reflectionClass = new \ReflectionClass($type);
-        $q = $this->em->createQuery();
-        $alias = strtolower($reflectionClass->getShortName());
-        $dql = "SELECT $alias FROM $type $alias WHERE";
-        $i = 1;
-        foreach($conditions as $key => $value) {
-            $dql .= " $alias.$key = ?$i";
-            $q->setParameter($i, $value);
-            if($i < sizeof($conditions))
-                $dql .= ' AND';
-            $i++;
-        }
-        $q->setDql($dql);
-        return $q->getResult();
+        return $this->findBy('Domain\\Entities\\User', $conditions)[0];
+    }
+
+    protected function doctrinePersist($object)
+    {
+        $this->manager->persist($object);
+        $this->flush();
+    }
+
+    protected function findBy($type, $conditions)
+    {
+        return $this->manager->getRepository($type)
+                      ->findBy($conditions);
     }
 
     /**
@@ -299,7 +330,7 @@ class UserRepositoryTest extends TestBase
      */
     protected function flush()
     {
-        $this->em->flush();
+        $this->manager->flush();
     }
 
     /**
@@ -307,6 +338,6 @@ class UserRepositoryTest extends TestBase
      */
     protected function query($dql)
     {
-        return $this->em->createQuery($dql);
+        return $this->manager->createQuery($dql);
     }
 }
