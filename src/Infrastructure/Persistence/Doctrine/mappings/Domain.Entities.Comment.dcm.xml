@@ -13,5 +13,8 @@
         <field name="commenter_email" type="string" length="255" />
         <field name="commenter_url" type="string" length="255" nullable="true" />
 
+        <many-to-one field="post" target-entity="Domain\Entities\Post" inversed-by="comments">
+        </many-to-one>
+
     </entity>
 </doctrine-mapping>

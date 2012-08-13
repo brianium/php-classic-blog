@@ -181,7 +181,7 @@ class UserRepositoryTest extends RepositoryTestBase
 
         $post = $this->querySavedPost();
 
-        $this->assertEquals($post->getTitle(), $post->getTitle());
+        $this->assertEquals($this->user->getPosts()[0]->getTitle(), $post->getTitle());
     }
 
     public function test_should_set_association_on_post()

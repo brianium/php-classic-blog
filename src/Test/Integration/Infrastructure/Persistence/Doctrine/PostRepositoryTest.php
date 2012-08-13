@@ -97,6 +97,41 @@ class PostRepositoryTest extends RepositoryTestBase
         $this->assertEquals(new \DateTime('now'), $post->getDate());
     }
 
+    public function test_should_store_comment_collection()
+    {
+        $this->addNewComment();
+        $this->storePost();
+
+        $comment = $this->querySavedComment();
+
+        $this->assertEquals($this->post->getComments()[0]->getText(), $comment->getText());
+    }
+
+    public function test_should_set_association_on_comment()
+    {
+        $comment = $this->addNewComment();
+        $this->repo->store($this->post);
+        $comment->setPost($this->post);
+        $this->flush();
+
+        $comment = $this->querySavedComment();
+
+        $this->assertEquals($this->post, $comment->getPost());
+    }
+
+    public function test_delete_should_remove_comments()
+    {
+        $this->addNewComment();
+        $this->storePost();
+
+        $this->repo->delete($this->post);
+        $this->flush();
+        $comment = $this->querySavedComment();
+        
+        $this->assertNull($comment);
+    }
+
+
     /**
      * Store via repo
      */
@@ -109,5 +144,22 @@ class PostRepositoryTest extends RepositoryTestBase
     public function getPost($conditions)
     {
         return $this->findBy($conditions)[0];
+    }
+
+    protected function addNewComment()
+    {
+        $comment = $this->loadFixture('Test\\Fixtures\\Comment\\NewComment','Domain\\Entities\\Comment')
+                        ->getAsComment();
+        $this->post->addComment($comment);
+        return $comment;
+    }
+
+    protected function querySavedComment()
+    {
+        $q = $this->query('SELECT c FROM Domain\\Entities\\Comment c WHERE c.id = ?1');
+        $q->setParameter(1, 1);
+        $comments = $q->getResult();
+        if($comments)
+            return $comments[0];
     }
 }

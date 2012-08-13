@@ -15,5 +15,12 @@
         <many-to-one field="user" target-entity="Domain\Entities\User" inversed-by="posts">
         </many-to-one>
 
+        <one-to-many field="comments" target-entity="Domain\Entities\Comment" mapped-by="post">
+            <cascade>
+                <cascade-persist />
+                <cascade-remove />
+            </cascade>
+        </one-to-many>
+
     </entity>
 </doctrine-mapping>
