@@ -113,6 +113,6 @@ class PostRepositoryTest extends RepositoryTestBase
 
     public function getPost($conditions)
     {
-        return $this->findBy('Domain\\Entities\\Post', $conditions)[0];
+        return $this->findBy($conditions)[0];
     }
 }

@@ -14,5 +14,11 @@
         <field name="timeout" type="integer" nullable="false" />
         <field name="date" type="datetime" nullable="false" />
 
+        <one-to-many field="posts" target-entity="Domain\Entities\Post" mapped-by="user">
+            <cascade>
+                <cascade-persist />
+            </cascade>
+        </one-to-many>
+
     </entity>
 </doctrine-mapping>

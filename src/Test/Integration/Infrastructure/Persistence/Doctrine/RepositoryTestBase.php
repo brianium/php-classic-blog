@@ -1,11 +1,14 @@
 <?php
 namespace Test\Integration\Infrastructure\Persistence\Doctrine;
 use Test\TestBase;
+use Test\RepositoryTester;
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
+use Doctrine\Common\Cache\ArrayCache;
 class RepositoryTestBase extends TestBase
 {
+    use RepositoryTester;
     protected $manager;
     protected $classes = ['User', 'Post'];
     protected $tool;
@@ -41,10 +44,18 @@ class RepositoryTestBase extends TestBase
         $this->flush();
     }
 
-    protected function findBy($type, $conditions)
+    protected function findBy($conditions)
     {
-        return $this->manager->getRepository($type)
+        return $this->manager->getRepository($this->getEntityType())
                       ->findBy($conditions);
+    }
+
+    /**
+     * Detach entities from the repository
+     */
+    protected function clear()
+    {
+        $this->manager->getRepository($this->getEntityType())->clear();
     }
 
     /**
@@ -63,18 +74,18 @@ class RepositoryTestBase extends TestBase
         return $this->manager->createQuery($dql);
     }
 
+    private function getEntityType()
+    {
+        $reflection = new \ReflectionClass(get_class($this));
+        $test = $reflection->getShortName();
+        $entityType = 'Domain\\Entities\\' . str_replace('RepositoryTest', '', $test);
+        return $entityType;
+    }
+
     private function buildClassMeta()
     {
         $this->classes = array_map(function($entity){
             return $this->manager->getClassMetadata('Domain\\Entities\\' . $entity);
         }, $this->classes);
-    }
-
-    private function getRepo()
-    {
-        $reflection = new \ReflectionClass(get_class($this));
-        $test = $reflection->getShortName();
-        $repoClass = 'Infrastructure\\Persistence\\Doctrine\\' . str_replace('Test', '', $test);
-        return new $repoClass($this->manager);
     }
 }

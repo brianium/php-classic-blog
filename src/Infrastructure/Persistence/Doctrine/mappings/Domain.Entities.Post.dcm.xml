@@ -12,5 +12,8 @@
         <field name="content" type="text" />
         <field name="date" type="datetime" nullable="false" />
 
+        <many-to-one field="user" target-entity="Domain\Entities\User" inversed-by="posts">
+        </many-to-one>
+
     </entity>
 </doctrine-mapping>

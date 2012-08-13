@@ -174,6 +174,20 @@ class UserRepositoryTest extends RepositoryTestBase
         $this->assertEquals(new \DateTime('now'), $user->getDate());
     }
 
+    public function test_should_store_post_collection()
+    {
+        $post = $this->loadFixture('Test\\Fixtures\\Post\\NewPost','Domain\\Entities\\Post')
+                     ->getAsPost();
+        $this->user->addPost($post);
+        $this->storeUser();
+
+        $q = $this->query('SELECT p FROM Domain\\Entities\\Post p WHERE p.id = ?1');
+        $q->setParameter(1, 1);
+        $post = $q->getResult()[0];
+
+        $this->assertEquals($post->getTitle(), $post->getTitle());
+    }
+
     public function test_should_get_user_by_id()
     {
         $this->persistUser();
@@ -285,6 +299,6 @@ class UserRepositoryTest extends RepositoryTestBase
 
     protected function getUser($conditions)
     {
-        return $this->findBy('Domain\\Entities\\User', $conditions)[0];
+        return $this->findBy($conditions)[0];
     }
 }
