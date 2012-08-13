@@ -13,11 +13,6 @@ class PostRepositoryTest extends RepositoryTestBase
         $this->post = $this->fixture->getAsPost();
     }
 
-    public function testTrue()
-    {
-        $this->assertTrue(true);
-    }
-
     public function test_should_store_new_Post()
     {
         $this->storePost();

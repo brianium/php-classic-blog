@@ -184,6 +184,18 @@ class UserRepositoryTest extends RepositoryTestBase
         $this->assertEquals($post->getTitle(), $post->getTitle());
     }
 
+    public function test_should_set_association_on_post()
+    {
+        $post = $this->addNewPost();
+        $this->repo->store($this->user);
+        $post->setUser($this->user);
+        $this->flush();
+
+        $post = $this->querySavedPost();
+
+        $this->assertEquals($this->user, $post->getUser());
+    }
+
     public function test_should_get_user_by_id()
     {
         $this->persistUser();
@@ -315,6 +327,7 @@ class UserRepositoryTest extends RepositoryTestBase
         $post = $this->loadFixture('Test\\Fixtures\\Post\\NewPost','Domain\\Entities\\Post')
                      ->getAsPost();
         $this->user->addPost($post);
+        return $post;
     }
 
     protected function querySavedPost()
