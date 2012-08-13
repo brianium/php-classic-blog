@@ -10,7 +10,7 @@ class RepositoryTestBase extends TestBase
 {
     use RepositoryTester;
     protected $manager;
-    protected $classes = ['User', 'Post'];
+    protected $classes = ['User', 'Post', 'Comment'];
     protected $tool;
     protected $repo;
 

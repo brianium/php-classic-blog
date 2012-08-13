@@ -13,6 +13,11 @@ class Comment extends Entity
     protected $commenter_email;
     protected $commenter_url;
 
+    public function __construct()
+    {
+        $this->date = new \DateTime('now');
+    }
+
     public function getText()
     {
         return $this->text;

@@ -44,6 +44,13 @@ class CommentTest extends TestBase
         $this->assertEquals($date, $this->getObjectValue($this->comment, 'date'));
     }
 
+    public function test_date_should_default_to_now()
+    {
+        $now = new \DateTime('now');
+        $comment = new Comment();
+        $this->assertEquals($now, $comment->getDate());
+    }
+
     public function test_getCommenter_should_return_commenter_value_object()
     {
         $expected = new Commenter('Brian Scaturro', 'scaturrob@gmail.com', 'http://brianscaturro.com');
