@@ -17,6 +17,7 @@
         <one-to-many field="posts" target-entity="Domain\Entities\Post" mapped-by="user">
             <cascade>
                 <cascade-persist />
+                <cascade-remove />
             </cascade>
         </one-to-many>
 

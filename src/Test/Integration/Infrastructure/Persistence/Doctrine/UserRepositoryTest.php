@@ -176,14 +176,10 @@ class UserRepositoryTest extends RepositoryTestBase
 
     public function test_should_store_post_collection()
     {
-        $post = $this->loadFixture('Test\\Fixtures\\Post\\NewPost','Domain\\Entities\\Post')
-                     ->getAsPost();
-        $this->user->addPost($post);
+        $this->addNewPost();
         $this->storeUser();
 
-        $q = $this->query('SELECT p FROM Domain\\Entities\\Post p WHERE p.id = ?1');
-        $q->setParameter(1, 1);
-        $post = $q->getResult()[0];
+        $post = $this->querySavedPost();
 
         $this->assertEquals($post->getTitle(), $post->getTitle());
     }
@@ -269,6 +265,18 @@ class UserRepositoryTest extends RepositoryTestBase
         $this->assertEmpty($this->manager->getRepository('Domain\\Entities\\User')->findAll());
     }
 
+    public function test_delete_should_remove_posts()
+    {
+        $this->addNewPost();
+        $this->storeUser();
+
+        $this->repo->delete($this->user);
+        $this->flush();
+        $post = $this->querySavedPost();
+        
+        $this->assertNull($post);
+    }
+
     public function test_flush_should_update_user()
     {
         $this->persistUser();
@@ -300,5 +308,21 @@ class UserRepositoryTest extends RepositoryTestBase
     protected function getUser($conditions)
     {
         return $this->findBy($conditions)[0];
+    }
+
+    protected function addNewPost()
+    {
+        $post = $this->loadFixture('Test\\Fixtures\\Post\\NewPost','Domain\\Entities\\Post')
+                     ->getAsPost();
+        $this->user->addPost($post);
+    }
+
+    protected function querySavedPost()
+    {
+        $q = $this->query('SELECT p FROM Domain\\Entities\\Post p WHERE p.id = ?1');
+        $q->setParameter(1, 1);
+        $posts = $q->getResult();
+        if($posts)
+            return $posts[0];
     }
 }
