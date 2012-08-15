@@ -23,9 +23,12 @@ class EntityManagerFactory
 
     private static function getDbParams()
     {
-        $params = ['user' => 'root', 'driver' => 'pdo_sqlite',
-                   'dbname' => 'blog.test', 'memory' => true];
+        $json = dirname(__FILE__) . DS . 'doctrine.cfg.json';
+        $configs = json_decode(file_get_contents($json));
+
+        $paramsKey = (getenv('APPLICATION_ENV') == 'development') ? 'development' : 'production';
+        $params = $configs->params->{$paramsKey};
                    
-        return $params;
+        return get_object_vars($params);
     }
 }

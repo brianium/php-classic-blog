@@ -1,0 +1,10 @@
+{
+    "params": {
+        "development": {
+            "user": "root",
+            "driver": "pdo_sqlite",
+            "dbname": "blog.test",
+            "memory": true
+        }
+    }
+}
