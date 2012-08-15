@@ -131,7 +131,6 @@ class PostRepositoryTest extends RepositoryTestBase
         $this->assertNull($comment);
     }
 
-
     /**
      * Store via repo
      */
