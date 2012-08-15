@@ -67,6 +67,11 @@ class ConfigurationFactoryTest extends TestBase
         $this->assertEquals($proxies, $this->prodConfig->getProxyDir());
     }
 
+    public function test_buildProdConfig_should_return_config_with_ProxyNamespace_set_to_InfrastructurePersistenceDoctrineProxies()
+    {
+        $this->assertEquals('Infrastructure\\Persistence\\Doctrine\\Proxies', $this->prodConfig->getProxyNamespace());
+    }
+
     public function test_build_with_APPLICATION_ENV_set_to_development_returns_dev_config()
     {
         $config = $this->factory->build();

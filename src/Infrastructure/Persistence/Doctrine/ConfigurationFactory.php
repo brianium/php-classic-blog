@@ -11,7 +11,7 @@ class ConfigurationFactory
     {
         if(getenv('APPLICATION_ENV') == 'development')
             return $this->buildDevConfig();
-        
+
         return $this->buildProdConfig();
     }
 
@@ -23,6 +23,8 @@ class ConfigurationFactory
     public function buildProdConfig()
     {
         $proxies = dirname(__FILE__) . DS . 'proxies';
-        return Setup::createXMLMetadataConfiguration($this->paths, false, $proxies);
+        $config = Setup::createXMLMetadataConfiguration($this->paths, false, $proxies);
+        $config->setProxyNamespace('Infrastructure\\Persistence\\Doctrine\\Proxies');
+        return $config;
     }
 }
