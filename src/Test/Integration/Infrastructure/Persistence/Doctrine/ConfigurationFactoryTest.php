@@ -6,11 +6,13 @@ class ConfigurationFactoryTest extends TestBase
 {
     protected $factory;
     protected $devConfig;
+    protected $prodConfig;
 
     public function setUp()
     {
         $this->factory = new ConfigurationFactory();
         $this->devConfig = $this->factory->buildDevConfig();
+        $this->prodConfig = $this->factory->buildProdConfig();
     }
 
     public function test_buildDevConfig_should_return_config_with_ArrayCache_for_MetadataCache()
@@ -31,5 +33,20 @@ class ConfigurationFactoryTest extends TestBase
     public function test_buildDevConfig_should_return_config_with_ProxyDir_set_to_temp()
     {
         $this->assertEquals(sys_get_temp_dir(), $this->devConfig->getProxyDir());
+    }
+
+    public function test_buildProdConfig_should_return_config_with_ApcCache_for_MetadataCache()
+    {
+        $this->assertInstanceOf('Doctrine\\Common\\Cache\\ApcCache', $this->prodConfig->getMetadataCacheImpl());
+    }
+
+    public function test_buildProdConfig_should_return_config_with_ApcCache_for_QueryCache()
+    {
+        $this->assertInstanceOf('Doctrine\\Common\\Cache\\ApcCache', $this->prodConfig->getQueryCacheImpl());
+    }
+
+    public function test_buildDevConfig_should_return_config_with_ApcCache_for_ResultCache()
+    {
+        $this->assertInstanceOf('Doctrine\\Common\\Cache\\ApcCache', $this->prodConfig->getResultCacheImpl());
     }
 }
