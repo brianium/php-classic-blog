@@ -2,10 +2,9 @@
 namespace Test\Integration\Infrastructure\Persistence\Doctrine;
 use Test\TestBase;
 use Test\RepositoryTester;
-use Doctrine\ORM\Tools\Setup;
+use Infrastructure\Persistence\Doctrine\ConfigurationFactory;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
-use Doctrine\Common\Cache\ArrayCache;
 class RepositoryTestBase extends TestBase
 {
     use RepositoryTester;
@@ -25,8 +24,7 @@ class RepositoryTestBase extends TestBase
             'dbname' => 'blog.test',
             'memory' => true
         ];
-        $config = Setup::createXMLMetadataConfiguration($paths, $isDevMode);
-        $this->manager = EntityManager::create($dbParams, $config);
+        $this->manager = EntityManager::create($dbParams, $this->getConfiguration());
         $this->tool = new SchemaTool($this->manager);
         $this->buildClassMeta();
         $this->tool->createSchema($this->classes);
@@ -87,5 +85,11 @@ class RepositoryTestBase extends TestBase
         $this->classes = array_map(function($entity){
             return $this->manager->getClassMetadata('Domain\\Entities\\' . $entity);
         }, $this->classes);
+    }
+
+    private function getConfiguration()
+    {
+        $factory = new ConfigurationFactory();
+        return $factory->build();
     }
 }

@@ -5,6 +5,7 @@ abstract class TestBase extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         date_default_timezone_set('America/New_York');
+        putenv('APPLICATION_ENV=development');
     }
 
     /**

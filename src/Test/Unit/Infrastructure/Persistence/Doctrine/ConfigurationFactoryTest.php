@@ -10,14 +10,10 @@ class ConfigurationFactoryTest extends TestBase
 
     public function setUp()
     {
+        parent::setUp();
         $this->factory = new ConfigurationFactory();
         $this->devConfig = $this->factory->buildDevConfig();
         $this->prodConfig = $this->factory->buildProdConfig();
-    }
-
-    public function tearDown()
-    {
-        putenv('APPLICATION_ENV');
     }
 
     public function test_buildDevConfig_should_return_config_with_ArrayCache_for_MetadataCache()
@@ -73,8 +69,6 @@ class ConfigurationFactoryTest extends TestBase
 
     public function test_build_with_APPLICATION_ENV_set_to_development_returns_dev_config()
     {
-        putenv('APPLICATION_ENV=development');
-
         $config = $this->factory->build();
 
         $this->assertEquals($this->devConfig, $config);
@@ -82,6 +76,8 @@ class ConfigurationFactoryTest extends TestBase
 
     public function test_build_with_APPLICATION_ENV_not_set_to_development_returns_prod_config()
     {
+        putenv('APPLICATION_ENV');
+
         $config = $this->factory->build();
 
         $this->assertEquals($this->prodConfig, $config);
