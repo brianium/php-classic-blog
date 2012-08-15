@@ -7,6 +7,14 @@ class ConfigurationFactory
         $this->paths = [APP_SRC . DS . 'Infrastructure' . DS . 'Persistence' . DS . 'Doctrine' . DS . 'mappings'];
     }
 
+    public function build()
+    {
+        if(getenv('APPLICATION_ENV') == 'development')
+            return $this->buildDevConfig();
+        
+        return $this->buildProdConfig();
+    }
+
     public function buildDevConfig()
     {
         return Setup::createXMLMetadataConfiguration($this->paths, true);
@@ -14,6 +22,7 @@ class ConfigurationFactory
 
     public function buildProdConfig()
     {
-        return Setup::createXMLMetadataConfiguration($this->paths, false);
+        $proxies = dirname(__FILE__) . DS . 'proxies';
+        return Setup::createXMLMetadataConfiguration($this->paths, false, $proxies);
     }
 }
