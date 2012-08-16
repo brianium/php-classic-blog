@@ -1,0 +1,75 @@
+{% extends "layout.phtml" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="hero-unit">
+    <h1>Join Super Blorg!</h1>
+    <p>
+        The Super Blorg! &reg; community would love to welcome you. Surrender to the loving embrace of Super Blorg &reg;
+    </p>
+    <p>
+        <a href="#" class="btn btn-primary btn-large">Learn More!</a>
+    </p>
+</div>
+
+<div class="row">
+    <div class="span6">
+        <p>
+            We just need to get a bit of information from you.
+        </p>
+        <form action="/register" class="form-horizontal well">
+            <div class="control-group">
+                <label for="user.username" class="control-label">Desired username:</label>
+                <div class="controls">
+                    <input type="text" placeholder="username" class="input-xlarge" id="user.username" name="user[username]" />
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="user.password" class="control-label">Password:</label>
+                <div class="controls">
+                    <input type="text" placeholder="password" class="input-xlarge" id="user.password" name="user[password]" />
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="user.passwordConfirm" class="control-label">Confirm password:</label>
+                <div class="controls">
+                    <input type="text" placeholder="confirm password" class="input-xlarge" id="user.passwordConfirm" name="user[passwordConfirm]" />
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <input type="submit" value="Register!" class="btn btn-primary btn-large" />
+            </div>
+        </form>
+    </div>
+    <div class="span6">
+        <h2>Reasons To Join Super Blorg &reg;</h2>
+        <ul>
+            <li>We aren't your grandfather's blogging tool.</li>
+            <li>We aren't your grandmother's blogging tool.</li>
+            <li>We aren't your dad's blogging tool.</li>
+            <li>The cool kids are doing it.</li>
+            <li>Our style is completely original.</li>
+        </ul>
+        <p>
+            Not convinced? Read what these satisfied users have to say!
+        </p>
+        <blockquote>
+            <p>
+                Super Blorg! &reg; is like the one slice of pizza left with bacon on it!
+            </p>
+            <small>Jon Smith</small>
+        </blockquote>
+
+        <blockquote>
+            <p>
+                Blorg? Instead of blog? Bold move bro....
+            </p>
+            <small>Jeremiah Prentice</small>
+        </blockquote>
+    </div>
+</div>
+{% endblock %}

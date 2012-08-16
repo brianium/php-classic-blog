@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>{% block title %}{% endblock %} - Super Blorg!</title>
+        <link rel="stylesheet" href="/Assets/css/bootstrap.min.css" type="text/css" />
+        <link rel="stylesheet" href="/Assets/css/bootstrap-responsive.min.css" type="text/css" />
+    </head>
+    <body>
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+
+        <div class="container">
+            <p>
+                Super Blorg! &copy; 2020 - Yeah It's The Future
+            </p>
+        </div>
+    </body>
+</html>
