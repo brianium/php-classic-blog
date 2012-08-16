@@ -1,6 +1,7 @@
 {
 	"require": {
-		"doctrine/orm":"2.*"
+		"doctrine/orm":"2.*",
+        "slim/slim":"1.6.5"
 	},
 	"config" : {
         "vendor-dir" : "lib"
