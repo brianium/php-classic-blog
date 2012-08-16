@@ -2,7 +2,8 @@
 	"require": {
 		"doctrine/orm":"2.*",
         "slim/slim":"1.6.5",
-        "slim/extras":"1.0.2"
+        "slim/extras":"1.0.2",
+        "twig/twig":"1.9.1"
 	},
 	"config" : {
         "vendor-dir" : "lib"
