@@ -10,12 +10,11 @@ class UnitOfWorkTest extends TestBase
     {
         parent::setUp();
         $this->uow = new UnitOfWork();
+        $this->uow->begin();
     }
 
     public function test_begin_should_set_connection_if_not_set()
     {
-        $this->uow->begin();
-
         $this->assertInstanceOf('Doctrine\\DBAL\\Connection', $this->getObjectValue($this->uow, 'connection'));
     }
 } 

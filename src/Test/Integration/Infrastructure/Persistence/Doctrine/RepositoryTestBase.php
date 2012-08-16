@@ -11,6 +11,7 @@ class RepositoryTestBase extends TestBase
     protected $classes = ['User', 'Post', 'Comment'];
     protected $tool;
     protected $repo;
+    protected $uow;
 
     public function setUp()
     {
