@@ -2,8 +2,7 @@
 namespace Test\Integration\Infrastructure\Persistence\Doctrine;
 use Test\TestBase;
 use Test\RepositoryTester;
-use Infrastructure\Persistence\Doctrine\ConfigurationFactory;
-use Doctrine\ORM\EntityManager;
+use Infrastructure\Persistence\Doctrine\EntityManagerFactory;
 use Doctrine\ORM\Tools\SchemaTool;
 class RepositoryTestBase extends TestBase
 {
@@ -16,15 +15,7 @@ class RepositoryTestBase extends TestBase
     public function setUp()
     {
         parent::setUp();
-        $paths = [APP_SRC . DS . 'Infrastructure' . DS . 'Persistence' . DS . 'Doctrine' . DS . 'mappings'];
-        $isDevMode = true;
-        $dbParams = [
-            'user' => 'root',
-            'driver' => 'pdo_sqlite',
-            'dbname' => 'blog.test',
-            'memory' => true
-        ];
-        $this->manager = EntityManager::create($dbParams, $this->getConfiguration());
+        $this->manager = EntityManagerFactory::getNewManager();
         $this->tool = new SchemaTool($this->manager);
         $this->buildClassMeta();
         $this->tool->createSchema($this->classes);
@@ -85,11 +76,5 @@ class RepositoryTestBase extends TestBase
         $this->classes = array_map(function($entity){
             return $this->manager->getClassMetadata('Domain\\Entities\\' . $entity);
         }, $this->classes);
-    }
-
-    private function getConfiguration()
-    {
-        $factory = new ConfigurationFactory();
-        return $factory->build();
     }
 }

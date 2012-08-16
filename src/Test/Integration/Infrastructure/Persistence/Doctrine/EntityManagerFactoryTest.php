@@ -9,7 +9,7 @@ class EntityManagerFactoryTest extends TestBase
     public function setUp()
     {
         parent::setUp();
-        $this->manager = EntityManagerFactory::getManager();
+        $this->manager = EntityManagerFactory::getNewManager();
     }
 
     public function test_static_getInstance_should_return_instance_of_EntityManager()
@@ -34,10 +34,18 @@ class EntityManagerFactoryTest extends TestBase
         $this->assertEquals('blog.test', $this->getParams()['dbname']);
     }
 
+    public function test_manager_uses_different_params_in_prod_mode()
+    {
+        $devParams = $this->getParams();
+        putenv('APPLICATION_ENV');
+
+        $prodParams = $this->getParams();
+
+        $this->assertNotEquals($devParams, $prodParams);
+    }
+
     protected function getParams()
     {
-        $connection = $this->manager->getConnection();
-
-        return $this->getObjectValue($connection, '_params');
+        return EntityManagerFactory::getDbParams();
     }
 }
