@@ -3,29 +3,25 @@ namespace Test\Integration\Infrastructure\Persistence\Doctrine;
 use Test\TestBase;
 use Test\RepositoryTester;
 use Infrastructure\Persistence\Doctrine\EntityManagerFactory;
-use Doctrine\ORM\Tools\SchemaTool;
+use Test\Integration\Infrastructure\Persistence\Doctrine\DataTester;
 class RepositoryTestBase extends TestBase
 {
     use RepositoryTester;
+    use DataTester;
     protected $manager;
-    protected $classes = ['User', 'Post', 'Comment'];
-    protected $tool;
     protected $repo;
-    protected $uow;
 
     public function setUp()
     {
         parent::setUp();
         $this->manager = EntityManagerFactory::getNewManager();
-        $this->tool = new SchemaTool($this->manager);
-        $this->buildClassMeta();
-        $this->tool->createSchema($this->classes);
+        $this->createSchema($this->manager);
         $this->repo = $this->getRepo();
     }
 
     public function tearDown()
     {
-        $this->tool->dropSchema($this->classes);
+        $this->dropSchema();
     }
 
     protected function doctrinePersist($object)
@@ -70,12 +66,5 @@ class RepositoryTestBase extends TestBase
         $test = $reflection->getShortName();
         $entityType = 'Domain\\Entities\\' . str_replace('RepositoryTest', '', $test);
         return $entityType;
-    }
-
-    private function buildClassMeta()
-    {
-        $this->classes = array_map(function($entity){
-            return $this->manager->getClassMetadata('Domain\\Entities\\' . $entity);
-        }, $this->classes);
     }
 }

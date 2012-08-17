@@ -4,13 +4,11 @@ use Test\TestBase;
 use Presentation\Models\Input\User;
 class UserTest extends TestBase
 {
-    protected $data;
     protected $input;
 
     public function setUp()
     {
-        $this->data = ['username' => 'brian', 'password' => 'pass', 'passwordConfirm' => 'pass'];
-        $this->input = new User($this->data);
+        $this->input = $this->loadFixture('Test\\Fixtures\\UserInput\\UserNoPostsInput', 'Presentation\\Models\\Input\\User');
     }
 
     public function test_isValid_should_return_false_if_username_omitted()
@@ -50,9 +48,8 @@ class UserTest extends TestBase
     public function test_isValid_should_return_false_if_username_greather_than_50_chars()
     {
         $this->setLongUsername();
-        $input = new User($this->data);
 
-        $valid = $input->isValid();
+        $valid = $this->input->isValid();
 
         $this->assertFalse($valid);
     }
@@ -64,7 +61,8 @@ class UserTest extends TestBase
 
     public function test_known_property_is_returned()
     {
-        $this->assertEquals('brian', $this->input->username);
+        $data = $this->getObjectValue($this->input, 'data');
+        $this->assertEquals($data['username'], $this->input->username);
     }
 
     public function test_should_have_error_message_for_username_if_username_is_empty()
@@ -141,12 +139,17 @@ class UserTest extends TestBase
         $username = '';
         for($i = 1; $i <= 51; $i++)
             $username .= 'a';
-        $this->data['username'] = $username;
+
+        $data = $this->getObjectValue($this->input, 'data');
+        $data['username'] = $username;
+        
+        $this->setObjectValue($this->input, 'data', $data);
     }
 
     protected function getInput($vals, $msgs = [])
     {
-        $this->data = array_merge($this->data, $vals);
-        return new User($this->data, $msgs);
+        $inputData = $this->getObjectValue($this->input, 'data');
+        $data = array_merge($inputData, $vals);
+        return new User($data, $msgs);
     }
 }
