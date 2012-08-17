@@ -115,7 +115,28 @@ class UserTest extends TestBase
         $this->assertEquals($msgAtMost, $input->getMessageFor('username'));
     }
 
-    public function setLongUsername()
+    public function test_non_matching_password_returns_error()
+    {
+        $input = $this->getInput(['passwordConfirm' => 'nope']);
+    }
+
+    public function test_setRepository_should_set_repository_property_to_UserRepository()
+    {
+        $repo = $this->getMock('Domain\\Repositories\\IUserRepository');
+        $this->input->setRepository($repo);
+
+        $this->assertInstanceOf('Domain\\Repositories\\IUserRepository', $this->getObjectValue($this->input, 'repository'));
+    }
+
+    public function test_setRepository_should_return_self()
+    {
+        $repo = $this->getMock('Domain\\Repositories\\IUserRepository');
+        $self = $this->input->setRepository($repo);
+
+        $this->assertSame($this->input, $self);
+    }
+
+    protected function setLongUsername()
     {
         $username = '';
         for($i = 1; $i <= 51; $i++)
