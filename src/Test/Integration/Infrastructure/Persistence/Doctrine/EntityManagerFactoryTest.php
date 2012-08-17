@@ -12,9 +12,16 @@ class EntityManagerFactoryTest extends TestBase
         $this->manager = EntityManagerFactory::getNewManager();
     }
 
-    public function test_static_getInstance_should_return_instance_of_EntityManager()
+    public function test_static_getNewManager_should_return_instance_of_EntityManager()
     {
         $this->assertInstanceOf('Doctrine\\ORM\\EntityManager', $this->manager);
+    }
+
+    public function test_getSingleton_returns_shared_instance()
+    {
+        $first = EntityManagerFactory::getSingleton();
+        $second = EntityManagerFactory::getSingleton();
+        $this->assertSame($first, $second);
     }
 
     public function test_manager_uses_pdo_sqlite_when_in_dev_mode()

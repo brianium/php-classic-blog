@@ -47,6 +47,12 @@ class User extends InputModel
 
     protected function setDefaultMessages()
     {
-        $this->messages['username.nonEmpty'] = 'Username is required';
+        $this->messages = [
+            'username.nonEmpty' => 'Username is required',
+            'username.nonUnique' => 'Username is already in use',
+            'username.atMostChars' => "Username can't exceed 50 chars",
+            'password.nonEmpty' => 'Password is required',
+            'passwordConfirm.matchesInput' => "Passwords don't match"
+        ];
     }
 }

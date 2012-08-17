@@ -4,6 +4,8 @@ use Infrastructure\Persistence\Doctrine\ConfigurationFactory;
 use Doctrine\ORM\EntityManager;
 class EntityManagerFactory
 {
+    private static $singleton;
+
     public static function getNewManager()
     {
         $configFactory = new ConfigurationFactory();
@@ -22,5 +24,13 @@ class EntityManagerFactory
             return [];
                    
         return get_object_vars($configs->params->{$paramsKey});
+    }
+
+    public static function getSingleton()
+    {
+        if(is_null(self::$singleton))
+            self::$singleton = self::getNewManager();
+
+        return self::$singleton;
     }
 }
