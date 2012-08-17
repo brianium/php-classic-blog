@@ -1,6 +1,8 @@
 <?php
 namespace Test\Integration\Infrastructure\Persistence\Doctrine;
 use Domain\Entities\User;
+use Infrastructure\Persistence\Doctrine\UserRepository;
+use Infrastructure\Persistence\Doctrine\EntityManagerFactory;
 class UserRepositoryTest extends RepositoryTestBase
 {
     protected $fixture;
@@ -11,6 +13,14 @@ class UserRepositoryTest extends RepositoryTestBase
         parent::setUp();
         $this->fixture = $this->loadFixture('Test\\Fixtures\\User\\NewUser', 'Domain\\Entities\\User');
         $this->user = $this->fixture->getAsUser();
+    }
+
+    public function test_omitting_entity_manager_will_default_manager_to_singleton_manager()
+    {
+        $this->repo = new UserRepository();
+        $manager = $this->getObjectValue($this->repo, 'manager');
+
+        $this->assertSame(EntityManagerFactory::getSingleton(), $manager);
     }
 
     public function test_should_store_new_User()

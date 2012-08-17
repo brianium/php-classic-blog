@@ -1,16 +1,22 @@
 <?php
 namespace Infrastructure\Persistence\Doctrine;
-use Doctrine\ORM\EntityManager;
 use Domain\Entities\Entity;
+use Infrastructure\Persistence\Doctrine\EntityManagerFactory;
 class RepositoryBase
 {
     protected $manager;
     protected $type;
 
-    public function __construct(EntityManager $em)
+    public function __construct($em = null)
     {
         if(!class_exists($this->type))
             throw new \DomainException('protected property $type must specify fully qualified Entity class name');
+
+        if(is_null($em))
+            $em = EntityManagerFactory::getSingleton();
+
+        if(!is_a($em, 'Doctrine\\ORM\\EntityManager'))
+            throw new \InvalidArgumentException('Repository must be constructed with an instance of Doctrine\\ORM\\EntityManager');
 
         $this->manager = $em;
     }
