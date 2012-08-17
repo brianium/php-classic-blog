@@ -84,14 +84,10 @@ class UserTest extends TestBase
         $this->assertNotEmpty($input->getMessageFor('username'));
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function test_error_message_not_set_before_isValid_called()
+    public function test_should_return_empty_string_for_message_if_validation_hasnt_occured()
     {
-        $input = $this->getInput(['username' => null]);
-
-        $this->assertEmpty($input->getMessageFor('username'));
+        $msg = $this->input->getMessageFor('username');
+        $this->assertEmpty($msg);
     }
 
     public function test_getMessage_returns_empty_for_unkown_property()

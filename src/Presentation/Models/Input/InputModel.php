@@ -50,7 +50,11 @@ abstract class InputModel
 
     public function getMessageFor($key)
     {
-        return $this->validator->getErrorMessage($key);
+        $message = '';
+        try {
+            $message = $this->validator->getErrorMessage($key);
+        } catch(\RuntimeException $e) {}
+        return $message;
     }
 
     protected function setDefaultMessages()

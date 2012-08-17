@@ -23,6 +23,11 @@
                 <label for="user.username" class="control-label">Desired username:</label>
                 <div class="controls">
                     <input type="text" placeholder="username" value="{{ user.username }}" class="input-xlarge" id="user.username" name="user[username]" />
+                    {% if user.getMessageFor('username') %}
+                    <p class="help-block error">
+                        {{ user.getMessageFor('username') }}
+                    </p>
+                    {% endif %}
                 </div>
             </div>
 
