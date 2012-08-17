@@ -23,6 +23,14 @@ class UserRepositoryTest extends RepositoryTestBase
         $this->assertSame(EntityManagerFactory::getSingleton(), $manager);
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function test_construct_with_non_EntityManager_throws_exception()
+    {
+        $this->repo = new UserRepository(new \stdClass);
+    }
+
     public function test_should_store_new_User()
     {
         $this->storeUser();

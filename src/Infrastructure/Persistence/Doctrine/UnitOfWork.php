@@ -13,7 +13,7 @@ class UnitOfWork
     public function begin()
     {
         if(is_null($this->connection))
-            $this->connection = EntityManagerFactory::getNewManager()->getConnection();
+            $this->connection = EntityManagerFactory::getSingleton()->getConnection();
 
         $this->connection->beginTransaction();
     }
