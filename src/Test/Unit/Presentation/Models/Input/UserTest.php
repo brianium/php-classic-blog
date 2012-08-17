@@ -46,8 +46,7 @@ class UserTest extends TestBase
     {
         $valid = $this->input->isValid();
 
-        //$this->assertTrue($valid);
-        $this->assertTrue(true);
+        $this->assertTrue($valid);
     }
 
     public function test_isValid_should_return_false_if_username_greather_than_50_chars()
@@ -68,6 +67,12 @@ class UserTest extends TestBase
     {
         $data = $this->getObjectValue($this->input, 'data');
         $this->assertEquals($data['username'], $this->input->username);
+    }
+
+    public function test_known_property_is_returned_with_method_syntax()
+    {
+        $data = $this->getObjectValue($this->input, 'data');
+        $this->assertEquals($data['username'], $this->input->username());
     }
 
     public function test_should_have_error_message_for_username_if_username_is_empty()

@@ -43,6 +43,11 @@ abstract class InputModel
         return @$this->data[$key];
     }
 
+    public function __call($key, $args)
+    {
+        return @$this->data[$key];
+    }
+
     public function getMessageFor($key)
     {
         return $this->validator->getErrorMessage($key);
