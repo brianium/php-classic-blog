@@ -32,7 +32,15 @@ class User extends InputModel
 
     public function validateUniqueUser($v)
     {
-        $v->setError('nonUnique');
-        return false;
+        if(is_null($this->repository))
+            throw new \RuntimeException('UserRepository must be set for unique validation');
+
+        $var = $v->get();
+        if($this->repository->getBy(['username' => $var])) {
+            $v->setError('nonUnique');
+            return false;
+        }
+
+        return true;
     }
 }

@@ -5,10 +5,13 @@ use Presentation\Models\Input\User;
 class UserTest extends TestBase
 {
     protected $input;
+    protected $repo;
 
     public function setUp()
     {
         $this->input = $this->loadFixture('Test\\Fixtures\\UserInput\\UserNoPostsInput', 'Presentation\\Models\\Input\\User');
+        $this->repo = $this->getMock('Domain\\Repositories\\UserRepository');
+        $this->input->setRepository($this->repo);
     }
 
     public function test_isValid_should_return_false_if_username_omitted()
@@ -121,9 +124,6 @@ class UserTest extends TestBase
 
     public function test_setRepository_should_set_repository_property_to_UserRepository()
     {
-        $repo = $this->getMock('Domain\\Repositories\\UserRepository');
-        $this->input->setRepository($repo);
-
         $this->assertInstanceOf('Domain\\Repositories\\UserRepository', $this->getObjectValue($this->input, 'repository'));
     }
 
@@ -133,6 +133,16 @@ class UserTest extends TestBase
         $self = $this->input->setRepository($repo);
 
         $this->assertSame($this->input, $self);
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function test_isValid_with_no_repository_throws_exception()
+    {
+        $this->setObjectValue($this->input, 'repository', null);
+
+        $this->input->isValid();
     }
 
     protected function setLongUsername()
@@ -151,6 +161,7 @@ class UserTest extends TestBase
     {
         $inputData = $this->getObjectValue($this->input, 'data');
         $data = array_merge($inputData, $vals);
-        return new User($data, $msgs);
+        $input = new User($data, $msgs);
+        return $input->setRepository($this->repo);
     }
 }
