@@ -36,18 +36,18 @@ class RepositoryBase
 
     public function get($id)
     {
-        return $this->manager->find('Domain\\Entities\\User', $id);
+        return $this->manager->find($this->type, $id);
     }
 
     public function getAll()
     {
-        return $this->manager->getRepository('Domain\\Entities\\User')
+        return $this->manager->getRepository($this->type)
                     ->findAll();
     }
 
     public function getBy($conditions)
     {
-        return $this->manager->getRepository('Domain\\Entities\\User')
+        return $this->manager->getRepository($this->type)
                              ->findBy($conditions);
     }
 

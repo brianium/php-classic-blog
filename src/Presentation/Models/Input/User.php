@@ -1,15 +1,22 @@
 <?php
 namespace Presentation\Models\Input;
-use Domain\Repositories\IUserRepository;
+use Domain\Repositories\UserRepository;
 class User extends InputModel
 {
     protected $repository;
+
+    public function __construct($data, $msgs = [])
+    {
+        parent::__construct($data, $msgs);
+        $this->validator->addRuleSet($this);
+    }
 
     protected function initValidation()
     {
         $this->validator->validate('username', function($v){
             return $v->require()
-                and $v->atMostChars(50);
+                and $v->atMostChars(50)
+                and $v->uniqueUser();
         })->validate('password', function($v){
             return $v->require();
         })->validate('passwordConfirm', function($v){
@@ -17,9 +24,15 @@ class User extends InputModel
         });
     }
 
-    public function setRepository(IUserRepository $repo)
+    public function setRepository(UserRepository $repo)
     {
         $this->repository = $repo;
         return $this;
+    }
+
+    public function validateUniqueUser($v)
+    {
+        $v->setError('nonUnique');
+        return false;
     }
 }

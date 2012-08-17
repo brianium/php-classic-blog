@@ -5,9 +5,12 @@ trait DataTester
 {
     protected $classes = ['User', 'Post', 'Comment'];
     protected $tool;
+    protected $manager;
 
     public function createSchema($manager)
     {
+        if(!$this->manager)
+            $this->manager = $manager;
         $this->tool = new SchemaTool($manager);
         $this->buildClassMeta();
         $this->tool->createSchema($this->classes);
