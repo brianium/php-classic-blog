@@ -168,6 +168,15 @@ class UserTest extends TestBase
         $this->assertEquals('Username is required', $input->getMessageFor('username'));
     }
 
+    public function test_default_messages_set_when_two_nonEmpty_keys_in_use()
+    {
+        $input = $this->getInput(['username' => null, 'password' => null]);
+
+        $input->isValid();
+
+        $this->assertEquals('Username is required', $input->getMessageFor('username'));
+    }
+
     protected function setLongUsername()
     {
         $username = '';

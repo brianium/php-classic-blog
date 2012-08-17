@@ -30,11 +30,12 @@ abstract class InputModel
 
     public function applyMessages()
     {
+        $errorMessages = $this->validator->getErrorMessage();
         foreach($this->messages as $key => $msg) {
             $parts = explode('.', $key);
-            $error = $this->validator->getError($parts[0]);
-            if($error && $value = $error->getValue())
-                $value->getValidation()->setMessage($parts[1], $msg);
+            $field = $parts[0]; $errorKey = $parts[1];
+            if(isset($errorMessages[$field]) && $errorMessages[$field] == $errorKey)
+                $this->messages[$field] = $msg;
         }
     }
 
@@ -50,10 +51,7 @@ abstract class InputModel
 
     public function getMessageFor($key)
     {
-        $message = '';
-        try {
-            $message = $this->validator->getErrorMessage($key);
-        } catch(\RuntimeException $e) {}
+        $message = @$this->messages[$key];
         return $message;
     }
 

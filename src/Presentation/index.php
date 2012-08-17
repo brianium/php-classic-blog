@@ -29,6 +29,9 @@ $app->get('/register', function() use($app) {
 
 $app->post('/register', function() use($app) {
     $input = new Input\User($app->request()->post('user'));
+    if($input->isValid()) {
+        
+    }
     $app->render('register.phtml', array('user' => $input));
 });
 
