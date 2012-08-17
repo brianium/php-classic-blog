@@ -1,0 +1,43 @@
+{
+    "hash": "61dc086ba8951ff51497eacb8c48d5d1",
+    "packages": [
+        {
+            "package": "doctrine/common",
+            "version": "2.2.2"
+        },
+        {
+            "package": "doctrine/dbal",
+            "version": "2.2.2"
+        },
+        {
+            "package": "doctrine/orm",
+            "version": "2.2.3"
+        },
+        {
+            "package": "fuel/validation",
+            "version": "dev-master",
+            "source-reference": "1.0.0-beta1",
+            "commit-date": "1343413989"
+        },
+        {
+            "package": "slim/extras",
+            "version": "1.0.2"
+        },
+        {
+            "package": "slim/slim",
+            "version": "1.6.5"
+        },
+        {
+            "package": "twig/twig",
+            "version": "v1.9.1"
+        }
+    ],
+    "packages-dev": null,
+    "aliases": [
+
+    ],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "fuel/validation": 20
+    }
+}
