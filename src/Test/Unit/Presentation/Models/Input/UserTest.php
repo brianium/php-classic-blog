@@ -9,6 +9,7 @@ class UserTest extends TestBase
 
     public function setUp()
     {
+        parent::setUp();
         $this->input = $this->loadFixture('Test\\Fixtures\\UserInput\\UserNoPostsInput', 'Presentation\\Models\\Input\\User');
         $this->repo = $this->getMock('Domain\\Repositories\\UserRepository');
         $this->input->setRepository($this->repo);
