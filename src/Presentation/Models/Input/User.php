@@ -20,7 +20,8 @@ class User extends InputModel
         })->validate('password', function($v){
             return $v->require();
         })->validate('passwordConfirm', function($v){
-            return $v->require();
+            return $v->require()
+                and $v->matchesInput('password');
         });
     }
 
@@ -42,5 +43,10 @@ class User extends InputModel
         }
 
         return true;
+    }
+
+    protected function setDefaultMessages()
+    {
+        $this->messages['username.nonEmpty'] = 'Username is required';
     }
 }

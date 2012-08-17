@@ -118,9 +118,11 @@ class UserTest extends TestBase
         $this->assertEquals($msgAtMost, $input->getMessageFor('username'));
     }
 
-    public function test_non_matching_password_returns_error()
+    public function test_non_matching_passwordConfirm_returns_error()
     {
         $input = $this->getInput(['passwordConfirm' => 'nope']);
+
+        $this->assertFalse($input->isValid());
     }
 
     public function test_setRepository_should_set_repository_property_to_UserRepository()
@@ -144,6 +146,25 @@ class UserTest extends TestBase
         $this->setObjectValue($this->input, 'repository', null);
 
         $this->input->isValid();
+    }
+
+    public function test_isValid_should_return_false_if_user_exists()
+    {
+        $user = $this->loadFixture('Test\\Fixtures\\User\\UserNoPosts', 'Domain\\Entities\\User');
+        $this->repo->expects($this->any())
+                   ->method('getBy')
+                   ->will($this->returnValue([$user]));
+
+        $this->assertFalse($this->input->isValid());
+    }
+
+    public function test_default_messages_set()
+    {
+        $input = $this->getInput(['username' => null]);
+
+        $input->isValid();
+
+        $this->assertEquals('Username is required', $input->getMessageFor('username'));
     }
 
     protected function setLongUsername()
