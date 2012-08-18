@@ -1,5 +1,7 @@
 {% extends "layout.phtml" %}
 
+{% import "macros/controls.phtml" as controls %}
+
 {% block title %}Register{% endblock %}
 
 {% block content %}
@@ -19,31 +21,12 @@
             We just need to get a bit of information from you.
         </p>
         <form action="/register" method="post" class="form-horizontal well">
-            <div class="control-group {{ user.valid }}">
-                <label for="user.username" class="control-label">Desired username:</label>
-                <div class="controls">
-                    <input type="text" placeholder="username" value="{{ user.username }}" class="input-xlarge" id="user.username" name="user[username]" />
-                    {% if user.getMessageFor('username') %}
-                    <p class="help-block error">
-                        {{ user.getMessageFor('username') }}
-                    </p>
-                    {% endif %}
-                </div>
-            </div>
 
-            <div class="control-group">
-                <label for="user.password" class="control-label">Password:</label>
-                <div class="controls">
-                    <input type="text" placeholder="password" class="input-xlarge" id="user.password" name="user[password]" />
-                </div>
-            </div>
+            {{ controls.input('text', user, 'username', 'user', 'Desired username:')  }}
+            
+            {{ controls.input('password', user, 'password', 'user', 'Password:') }}
 
-            <div class="control-group">
-                <label for="user.passwordConfirm" class="control-label">Confirm password:</label>
-                <div class="controls">
-                    <input type="text" placeholder="confirm password" class="input-xlarge" id="user.passwordConfirm" name="user[passwordConfirm]" />
-                </div>
-            </div>
+            {{ controls.input('password', user, 'passwordConfirm', 'user', 'Confirm password:', 'confirm password') }}
 
             <div class="form-actions">
                 <input type="submit" value="Register!" class="btn btn-primary btn-large" />

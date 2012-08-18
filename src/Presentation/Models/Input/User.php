@@ -52,6 +52,7 @@ class User extends InputModel
             'username.nonUnique' => 'Username is already in use',
             'username.atMostChars' => "Username can't exceed 50 chars",
             'password.nonEmpty' => 'Password is required',
+            'passwordConfirm.nonEmpty' => 'Please confirm your password',
             'passwordConfirm.matchesInput' => "Passwords don't match"
         ];
     }
