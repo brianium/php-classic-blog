@@ -28,6 +28,12 @@ class UserAuthenticator
         return $this->hasher->checkPassword($this->user->getPassword(), $password);
     }
 
+    public function hashPassword()
+    {
+        $hashed = $this->hasher->hash($this->user->getPassword());
+        $this->user->setPassword($hashed);
+    }
+
     public function refreshTimeout(\DateInterval $interval = null)
     {
         $now = new \DateTime('now');
@@ -46,5 +52,13 @@ class UserAuthenticator
     {
         $token = md5(uniqid(rand(), true));
         $this->user->setToken($token);
+    }
+
+    public function initNewUser()
+    {
+        $this->hashPassword();
+        $this->refreshTimeout();
+        $this->refreshIdentifier();
+        $this->refreshToken();
     }
 }

@@ -111,6 +111,18 @@ class UserAuthenticatorTest extends TestBase
         $this->assertNotEquals($currentToken, $this->user->getToken());
     }
 
+    public function test_hashPassword_sets_user_password_to_hashed_version()
+    {
+        $this->hasher->expects($this->once())
+                     ->method('hash')
+                     ->with($this->user->getPassword())
+                     ->will($this->returnValue('sandwich'));
+
+        $this->authenticator->hashPassword();
+
+        $this->assertEquals('sandwich', $this->user->getPassword());
+    }
+
     protected function getStubbedHasher()
     {
         return $this->hasher->expects($this->once())
