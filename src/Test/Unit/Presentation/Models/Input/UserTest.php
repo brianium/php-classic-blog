@@ -177,6 +177,22 @@ class UserTest extends TestBase
         $this->assertEquals('Username is required', $input->getMessageFor('username'));
     }
 
+    public function test_create_sets_data_repository_and_messages()
+    {
+        $data = $this->getObjectValue($this->input, 'data');
+        $inputMsgs = $this->getObjectValue($this->input, 'messages');
+
+        $input = User::create($data, $this->repo);
+        //fixture not treated as same type for assertEquals - hence the three asserts
+        $iData = $this->getObjectValue($input, 'data');
+        $repo = $this->getObjectValue($input, 'repository');
+        $msgs = $this->getObjectValue($input, 'messages');
+
+        $this->assertEquals($data, $iData);
+        $this->assertEquals($this->repo, $repo);
+        $this->assertEquals($inputMsgs, $msgs);
+    }
+
     protected function setLongUsername()
     {
         $username = '';

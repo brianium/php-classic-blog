@@ -34,9 +34,7 @@ $app->post('/register', function() use($app) {
     $input = new Input\User($app->request()->post('user'));
     $input->setRepository($repo);
     if($input->isValid()) {
-        $user = new Entities\User();
-        $user->setUsername($input->username);
-        $user->setPassword($input->password);
+        $user = Entities\User::create($input->username, $input->password);
         $authenticator = new UserAuthenticator($user, $repo, new PasswordHasher());
         $authenticator->initNewUser();
         $repo->store($user);

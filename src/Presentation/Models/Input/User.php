@@ -45,6 +45,13 @@ class User extends InputModel
         return true;
     }
 
+    public function create($data, $repo, $msgs = [])
+    {
+        $user = new User($data, $msgs);
+        $user->setRepository($repo);
+        return $user;
+    }
+
     protected function setDefaultMessages()
     {
         $this->messages = [
