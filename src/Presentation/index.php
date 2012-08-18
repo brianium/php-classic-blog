@@ -3,6 +3,9 @@ require dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'bootstrap.php';
 
 use Infrastructure\Persistence\Doctrine\UnitOfWork;
 use Infrastructure\Persistence\Doctrine\UserRepository;
+use Domain\Entities;
+use Domain\UserAuthenticator;
+use Domain\PasswordHasher;
 use Presentation\Models\Input;
 
 $app = new Slim(array(
@@ -31,7 +34,12 @@ $app->post('/register', function() use($app) {
     $input = new Input\User($app->request()->post('user'));
     $input->setRepository($repo);
     if($input->isValid()) {
-        
+        $user = new Entities\User();
+        $user->setUsername($input->username);
+        $user->setPassword($input->password);
+        $authenticator = new UserAuthenticator($user, $repo, new PasswordHasher());
+        $authenticator->initNewUser();
+        $repo->store($user);
     }
     $app->render('register.phtml', array('user' => $input));
 });

@@ -86,4 +86,12 @@ class User extends Entity
     {
         return $this->posts;
     }
+
+    public static function create($username, $password)
+    {
+        $user = new User();
+        $user->setUsername($username);
+        $user->setPassword($password);
+        return $user;
+    }
 }

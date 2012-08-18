@@ -123,5 +123,16 @@ class UserTest extends TestBase
         $this->setObjectValue($this->user, 'posts', $collection);
         $this->assertContains($post, $this->user->getPosts());
     }
+
+    public function test_create_method_creates_new_user_with_username_and_password()
+    {
+        $user = new User();
+        $user->setUsername('brian');
+        $user->setPassword('password');
+
+        $created = User::create('brian', 'password');
+
+        $this->assertEquals($user, $created);
+    }
 }
 

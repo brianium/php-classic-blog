@@ -20,6 +20,7 @@ class UnitOfWork
 
     public function commit()
     {
+        EntityManagerFactory::getSingleton()->flush();
         $this->connection->commit();
     }
 
