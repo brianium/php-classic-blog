@@ -2,6 +2,8 @@
 
 {% block title %}Register{% endblock %}
 
+{% import "macros/controls.phtml" as controls %}
+
 {% block content %}
 <div class="hero-unit">
     <h1>Join Super Blorg!</h1>
@@ -19,7 +21,7 @@
             We just need to get a bit of information from you.
         </p>
         <form action="/register" method="post" class="form-horizontal well">
-            <div class="control-group">
+            <div class="control-group{{ controls.controlsClass(user) }}">
                 <label for="user.username" class="control-label">Desired username:</label>
                 <div class="controls">
                     <input type="text" placeholder="username" value="{{ user.username }}" class="input-xlarge" id="user.username" name="user[username]" />

@@ -21,6 +21,8 @@ abstract class InputModel
 
         $success = $this->validator->execute($this->data);
 
+        $this->setValidationClass($success);
+
         $this->applyMessages();
 
         return $success;
@@ -58,5 +60,10 @@ abstract class InputModel
     protected function setDefaultMessages()
     {
 
+    }
+
+    protected function setValidationClass($success)
+    {
+        
     }
 }
