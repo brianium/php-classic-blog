@@ -5,6 +5,12 @@
             "driver": "pdo_sqlite",
             "dbname": "blog.test",
             "memory": true
+        },
+        "production":{
+            "user":"root",
+            "driver":"pdo_mysql",
+            "dbname":"superblorg",
+            "password":"root"
         }
     }
 }

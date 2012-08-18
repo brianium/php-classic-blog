@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'Twig_Extensions_' => $vendorDir . '/slim/extras/Views/Extension/',
     'Twig_' => $vendorDir . '/twig/twig/lib/',
+    'Symfony\\Component\\Console' => $vendorDir . '/symfony/console/',
     'Slim' => $vendorDir . '/slim/slim/Slim/',
     'Fuel\\Validation' => $vendorDir . '/fuel/validation/classes/',
     'Doctrine\\ORM' => $vendorDir . '/doctrine/orm/lib/',

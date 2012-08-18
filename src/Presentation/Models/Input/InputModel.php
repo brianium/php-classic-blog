@@ -6,6 +6,7 @@ abstract class InputModel
     protected $data;
     protected $validator;
     protected $messages;
+    public $valid;
 
     public function __construct($data, $msgs = []) {
         $this->data = $data;
@@ -20,8 +21,6 @@ abstract class InputModel
         $this->initValidation();
 
         $success = $this->validator->execute($this->data);
-
-        $this->setValidationClass($success);
 
         $this->applyMessages();
 
@@ -60,10 +59,5 @@ abstract class InputModel
     protected function setDefaultMessages()
     {
 
-    }
-
-    protected function setValidationClass($success)
-    {
-        
     }
 }

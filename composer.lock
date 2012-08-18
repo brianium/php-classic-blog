@@ -1,5 +1,5 @@
 {
-    "hash": "61dc086ba8951ff51497eacb8c48d5d1",
+    "hash": "bea5995acd30e30af7c4dd7a08b43883",
     "packages": [
         {
             "package": "doctrine/common",
@@ -26,6 +26,10 @@
         {
             "package": "slim/slim",
             "version": "1.6.5"
+        },
+        {
+            "package": "symfony/console",
+            "version": "v2.0.16"
         },
         {
             "package": "twig/twig",

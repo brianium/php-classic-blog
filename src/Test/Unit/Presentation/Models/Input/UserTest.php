@@ -168,15 +168,6 @@ class UserTest extends TestBase
         $this->assertEquals('Username is required', $input->getMessageFor('username'));
     }
 
-    public function test_validation_class_is_error_when_invalid()
-    {
-        $input = $this->getInput(['username' => null]);
-
-        $input->isValid();
-
-        $this->assertEquals('error', $input->valid);   
-    }
-
     public function test_default_messages_set_when_two_nonEmpty_keys_in_use()
     {
         $input = $this->getInput(['username' => null, 'password' => null]);

@@ -5,7 +5,6 @@ class User extends InputModel
 {
     protected $repository;
 
-
     public function __construct($data, $msgs = [])
     {
         parent::__construct($data, $msgs);
@@ -44,12 +43,6 @@ class User extends InputModel
         }
 
         return true;
-    }
-
-    protected function setValidationClass($success)
-    {
-        $class = ($success) ? 'success' : 'error';
-        $this->data['valid'] = $class;
     }
 
     protected function setDefaultMessages()

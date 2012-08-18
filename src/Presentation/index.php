@@ -15,7 +15,6 @@ $app = new Slim(array(
 $unitOfWork = new UnitOfWork();
 
 $app->hook('slim.before', function() use($app, $unitOfWork){
-    putenv('APPLICATION_ENV=development');
     $unitOfWork->begin();
 });
 
@@ -28,7 +27,9 @@ $app->get('/register', function() use($app) {
 });
 
 $app->post('/register', function() use($app) {
+    $repo = new UserRepository();
     $input = new Input\User($app->request()->post('user'));
+    $input->setRepository($repo);
     if($input->isValid()) {
         
     }
