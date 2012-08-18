@@ -123,6 +123,14 @@ class UserAuthenticatorTest extends TestBase
         $this->assertEquals('sandwich', $this->user->getPassword());
     }
 
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function test_initNewUser_throws_exception_if_user_is_not_new()
+    {
+        $this->authenticator->initNewUser();
+    }
+
     protected function getStubbedHasher()
     {
         return $this->hasher->expects($this->once())

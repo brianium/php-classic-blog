@@ -56,6 +56,9 @@ class UserAuthenticator
 
     public function initNewUser()
     {
+        if(!$this->user->isNew())
+            throw new \RuntimeException('Cannot initialize existing user');
+        
         $this->hashPassword();
         $this->refreshTimeout();
         $this->refreshIdentifier();
