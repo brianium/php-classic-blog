@@ -8,4 +8,9 @@ class Entity
     {
         return $this->id;
     }
+
+    public function isNew()
+    {
+        return is_null($this->id);
+    }
 }

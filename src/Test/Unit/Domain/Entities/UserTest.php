@@ -108,6 +108,13 @@ class UserTest extends TestBase
         $this->assertContains($post, $posts);
     }
 
+    public function test_isNew_returns_true_if_id_not_set()
+    {
+        $this->setObjectValue($this->user, 'id', null);
+
+        $this->assertTrue($this->user->isNew());
+    }
+
     public function test_getPosts_should_return_posts_collection()
     {
         $collection = new ArrayCollection();
