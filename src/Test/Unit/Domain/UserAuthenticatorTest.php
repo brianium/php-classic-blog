@@ -72,45 +72,6 @@ class UserAuthenticatorTest extends TestBase
         $this->assertTrue($this->authenticator->isAuthenticated('password'));
     }
 
-    public function test_refreshTimeout_sets_user_timeout_to_now_plus_one_week_default()
-    {
-        $time = new \DateTime('now');
-        $time->add(new \DateInterval('P1W'));
-
-        $this->authenticator->refreshTimeout();
-
-        $this->assertEquals($time->getTimestamp(), $this->user->getTimeout());
-    }
-
-    public function test_refreshTimeout_sets_user_timeout_to_now_plus_specified_interval()
-    {
-        $time = new \DateTime('now');
-        $interval = new \DateInterval('P3W');
-        $time->add($interval);
-
-        $this->authenticator->refreshTimeout($interval);
-
-        $this->assertEquals($time->getTimestamp(), $this->user->getTimeout());
-    }
-
-    public function test_refreshIdentifier_sets_user_identifier_to_different_value()
-    {
-        $currentId = $this->user->getIdentifier();
-
-        $this->authenticator->refreshIdentifier();
-
-        $this->assertNotEquals($currentId, $this->user->getIdentifier());
-    }
-
-    public function test_refreshToken_sets_user_token_to_different_value()
-    {
-        $currentToken = $this->user->getToken();
-
-        $this->authenticator->refreshToken();
-
-        $this->assertNotEquals($currentToken, $this->user->getToken());
-    }
-
     public function test_hashPassword_sets_user_password_to_hashed_version()
     {
         $this->hasher->expects($this->once())

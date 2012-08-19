@@ -45,7 +45,7 @@ class User extends InputModel
         return true;
     }
 
-    public function create($data, $repo, $msgs = [])
+    public static function create($data, $repo, $msgs = [])
     {
         $user = new User($data, $msgs);
         $user->setRepository($repo);

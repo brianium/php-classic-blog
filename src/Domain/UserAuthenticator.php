@@ -34,26 +34,6 @@ class UserAuthenticator
         $this->user->setPassword($hashed);
     }
 
-    public function refreshTimeout(\DateInterval $interval = null)
-    {
-        $now = new \DateTime('now');
-
-        $now->add($interval ?: new \DateInterval('P1W'));
-
-        $this->user->setTimeout($now->getTimestamp());
-    }
-
-    public function refreshIdentifier()
-    {
-        $this->user->setIdentifier($this->hasher->hash($this->user->getUsername()));
-    }
-
-    public function refreshToken()
-    {
-        $token = md5(uniqid(rand(), true));
-        $this->user->setToken($token);
-    }
-
     public function initNewUser()
     {
         if(!$this->user->isNew())

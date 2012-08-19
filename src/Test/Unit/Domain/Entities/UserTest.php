@@ -124,6 +124,45 @@ class UserTest extends TestBase
         $this->assertContains($post, $this->user->getPosts());
     }
 
+    public function test_refreshTimeout_sets_user_timeout_to_now_plus_one_week_default()
+    {
+        $time = new \DateTime('now');
+        $time->add(new \DateInterval('P1W'));
+
+        $this->user->refreshTimeout();
+
+        $this->assertEquals($time->getTimestamp(), $this->user->getTimeout());
+    }
+
+    public function test_refreshTimeout_sets_user_timeout_to_now_plus_specified_interval()
+    {
+        $time = new \DateTime('now');
+        $interval = new \DateInterval('P3W');
+        $time->add($interval);
+
+        $this->user->refreshTimeout($interval);
+
+        $this->assertEquals($time->getTimestamp(), $this->user->getTimeout());
+    }
+
+    public function test_refreshIdentifier_sets_user_identifier_to_different_value()
+    {
+        $currentId = $this->user->getIdentifier();
+
+        $this->user->refreshIdentifier();
+
+        $this->assertNotEquals($currentId, $this->user->getIdentifier());
+    }
+
+    public function test_refreshToken_sets_user_token_to_different_value()
+    {
+        $currentToken = $this->user->getToken();
+
+        $this->user->refreshToken();
+
+        $this->assertNotEquals($currentToken, $this->user->getToken());
+    }
+
     public function test_create_method_creates_new_user_with_username_and_password()
     {
         $user = new User();

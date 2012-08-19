@@ -1,6 +1,7 @@
 <?php
 namespace Domain\Entities;
 use Doctrine\Common\Collections\ArrayCollection;
+use Domain\PasswordHasher;
 class User extends Entity
 {
     protected $username;
@@ -85,6 +86,27 @@ class User extends Entity
     public function getPosts()
     {
         return $this->posts;
+    }
+
+    public function refreshTimeout(\DateInterval $interval = null)
+    {
+        $now = new \DateTime('now');
+
+        $now->add($interval ?: new \DateInterval('P1W'));
+
+        $this->setTimeout($now->getTimestamp());
+    }
+
+    public function refreshIdentifier()
+    {
+        $hasher = new PasswordHasher();
+        $this->setIdentifier($hasher->hash($this->getUsername()));
+    }
+
+    public function refreshToken()
+    {
+        $token = md5(uniqid(rand(), true));
+        $this->setToken($token);
     }
 
     public static function create($username, $password)
