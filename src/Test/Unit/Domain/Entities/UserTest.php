@@ -163,6 +163,23 @@ class UserTest extends TestBase
         $this->assertNotEquals($currentToken, $this->user->getToken());
     }
 
+    public function test_refresh_updates_all_values()
+    {
+        $currentToken = $this->user->getToken();
+        $currentId = $this->user->getIdentifier();
+        $currentTime = $this->user->getTimeout();
+        $current = [$currentToken, $currentId, $currentTime];
+
+        $this->user->refresh();
+
+        $newToken = $this->user->getToken();
+        $newId = $this->user->getIdentifier();
+        $newTime = $this->user->getTimeout();
+        $new = [$newToken, $newId, $newTime];
+
+        $this->assertNotEquals($current, $new);
+    }
+
     public function test_create_method_creates_new_user_with_username_and_password()
     {
         $user = new User();

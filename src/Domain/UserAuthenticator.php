@@ -40,8 +40,6 @@ class UserAuthenticator
             throw new \RuntimeException('Cannot initialize existing user');
         
         $this->hashPassword();
-        $this->refreshTimeout();
-        $this->refreshIdentifier();
-        $this->refreshToken();
+        $this->user->refresh();
     }
 }

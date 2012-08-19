@@ -109,6 +109,13 @@ class User extends Entity
         $this->setToken($token);
     }
 
+    public function refresh()
+    {
+        $this->refreshTimeout();
+        $this->refreshIdentifier();
+        $this->refreshToken();
+    }
+
     public static function create($username, $password)
     {
         $user = new User();
