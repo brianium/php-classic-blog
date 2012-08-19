@@ -5,41 +5,38 @@ use Domain\Repositories\UserRepository;
 use Domain\PasswordHasher;
 class UserAuthenticator
 {
-    protected $user;
     protected $repo;
     protected $hasher;
 
     public function __construct(
-        User $user, 
         UserRepository $repo,
         PasswordHasher $hasher)
     {
-        $this->user = $user;
         $this->repo = $repo;
         $this->hasher = $hasher;
     }
 
-    public function isAuthenticated($password)
+    public function isAuthenticated($username, $password)
     {
-        $exists = $this->repo->contains($this->user);
+        $users = $this->repo->getBy(['username' => $username]);
 
-        if(!$exists) return false;
+        if(!$users) return false;
 
-        return $this->hasher->checkPassword($this->user->getPassword(), $password);
+        return $this->hasher->checkPassword($users[0]->getPassword(), $password);
     }
 
-    public function hashPassword()
+    public function hashPassword(User $user)
     {
-        $hashed = $this->hasher->hash($this->user->getPassword());
-        $this->user->setPassword($hashed);
+        $hashed = $this->hasher->hash($user->getPassword());
+        $user->setPassword($hashed);
     }
 
-    public function initNewUser()
+    public function initNewUser(User $user)
     {
-        if(!$this->user->isNew())
+        if(!$user->isNew())
             throw new \RuntimeException('Cannot initialize existing user');
         
-        $this->hashPassword();
-        $this->user->refresh();
+        $this->hashPassword($user);
+        $user->refresh();
     }
 }
