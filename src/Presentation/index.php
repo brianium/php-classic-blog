@@ -16,6 +16,8 @@ $app = new Slim(array(
 //common objects
 $unitOfWork = new UnitOfWork();
 $userRepo = new UserRepository();
+$passwordHasher = new PasswordHasher();
+$authenticator = new UserAuthenticator($userRepo, $passwordHasher);
 
 $protected = ['dashboard'];
 $app->hook('slim.before', function() use($app, $unitOfWork, $protected, $userRepo){
@@ -36,6 +38,7 @@ $app->hook('slim.before', function() use($app, $unitOfWork, $protected, $userRep
                     }
                 }
             }
+            //make user object for logged in user?
             break;
         }
     }
@@ -46,20 +49,23 @@ $app->hook('slim.after', function() use($app, $unitOfWork) {
     $unitOfWork->commit();
 });
 
-$app->get('/login', function(){
-    echo 'you gotta login and stuff';
+$app->get('/login', function() use($app) {
+    
+});
+
+$app->post('/login', function() use($app){
+
 });
 
 $app->get('/register', function() use($app) {
     $app->render('register.phtml');
 });
 
-$app->post('/register', function() use($app, $userRepo) {
+$app->post('/register', function() use($app, $userRepo, $authenticator) {
     $input = Input\User::create($app->request()->post('user'), $userRepo);
     if($input->isValid()) {
         $user = Entities\User::create($input->username, $input->password);
-        $authenticator = new UserAuthenticator($user, $userRepo, new PasswordHasher());
-        $authenticator->initNewUser();
+        $authenticator->initNewUser($user);
         $userRepo->store($user);
         $app->setCookie('superblorg', $user->getIdentifier() . ':' . $user->getToken());
         $app->response()->redirect('/dashboard', 303);
@@ -67,8 +73,16 @@ $app->post('/register', function() use($app, $userRepo) {
     $app->render('register.phtml', array('user' => $input));
 });
 
-$app->get('/dashboard', function() use ($app){
-    echo $app->request()->getPath();
+$app->get('/admin', function() use($app) {
+    //list recent posts with comment count? links to add/delete posts
+});
+
+$app->get('/admin/post', function() use($app) {
+    //form to add new post
+});
+
+$app->post('/admin/post', function() use($app) {
+    //create new post and redirect back to /admin
 });
 
 $app->run();
