@@ -20,3 +20,5 @@ $helperSet = new HelperSet(array(
     'db' => new ConnectionHelper($em->getConnection()),
     'em' => new EntityManagerHelper($em)
 ));
+
+ConsoleRunner::run($helperSet);
