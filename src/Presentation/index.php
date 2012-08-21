@@ -73,6 +73,7 @@ $app->post('/register', function() use($app, $userRepo, $authenticator) {
     $app->render('register.phtml', array('user' => $input));
 });
 
+#admin routes
 $app->get('/admin', function() use($app) {
     //list recent posts with comment count? links to add/delete posts
 });
@@ -83,6 +84,19 @@ $app->get('/admin/post', function() use($app) {
 
 $app->post('/admin/post', function() use($app) {
     //create new post and redirect back to /admin
+});
+
+#public routes
+$app->get('/user/:id/posts', function($id) use($app) {
+    //view posts for a given user
+});
+
+$app->get('/posts/:id', function($id) use($app) {
+    //display single post and comment form
+});
+
+$app->post('/post/:pid/comments', function() use($app) {
+    //add comment to post - probably view form for individual post
 });
 
 $app->run();
