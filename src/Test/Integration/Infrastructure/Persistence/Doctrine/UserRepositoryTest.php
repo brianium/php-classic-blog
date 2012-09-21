@@ -61,7 +61,7 @@ class UserRepositoryTest extends RepositoryTestBase
     }
 
     /**
-     * @expectedException \PDOException
+     * @expectedException Doctrine\DBAL\DBALException
      */
     public function test_should_not_store_with_null_username()
     {
@@ -70,7 +70,7 @@ class UserRepositoryTest extends RepositoryTestBase
     }
 
     /**
-     * @expectedException \PDOException
+     * @expectedException Doctrine\DBAL\DBALException
      */
     public function test_should_not_store_with_non_unique_username()
     {
@@ -90,7 +90,7 @@ class UserRepositoryTest extends RepositoryTestBase
     }
 
     /**
-     * @expectedException \PDOException
+     * @expectedException Doctrine\DBAL\DBALException
      */
     public function test_should_not_store_null_password()
     {
@@ -108,7 +108,7 @@ class UserRepositoryTest extends RepositoryTestBase
     }
 
     /**
-     * @expectedException \PDOException
+     * @expectedException Doctrine\DBAL\DBALException
      */
     public function test_should_not_store_null_identifier()
     {
@@ -117,7 +117,7 @@ class UserRepositoryTest extends RepositoryTestBase
     }
 
     /**
-     * @expectedException \PDOException
+     * @expectedException Doctrine\DBAL\DBALException
      */
     public function test_should_not_store_non_unique_identifier()
     {
@@ -137,7 +137,7 @@ class UserRepositoryTest extends RepositoryTestBase
     }
 
     /**
-     * @expectedException \PDOException
+     * @expectedException Doctrine\DBAL\DBALException
      */
     public function test_should_not_store_null_token()
     {
@@ -146,7 +146,7 @@ class UserRepositoryTest extends RepositoryTestBase
     }
 
     /**
-     * @expectedException \PDOException
+     * @expectedException Doctrine\DBAL\DBALException
      */
     public function test_should_not_store_non_unique_token()
     {
@@ -166,7 +166,7 @@ class UserRepositoryTest extends RepositoryTestBase
     }
 
     /**
-     * @expectedException \PDOException
+     * @expectedException Doctrine\DBAL\DBALException
      */
     public function test_should_not_store_null_timeout()
     {

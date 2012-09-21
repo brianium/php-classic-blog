@@ -32,7 +32,7 @@ class CommentRepositoryTest extends RepositoryTestBase
     }
 
     /**
-     * @expectedException   \PDOException
+     * @expectedException   Doctrine\DBAL\DBALException
      */
     public function test_should_not_store_null_text()
     {
@@ -64,7 +64,7 @@ class CommentRepositoryTest extends RepositoryTestBase
     }
 
     /**
-     * @expectedException \PDOException
+     * @expectedException Doctrine\DBAL\DBALException
      */
     public function test_should_not_store_commenter_with_null_name()
     {
@@ -75,7 +75,7 @@ class CommentRepositoryTest extends RepositoryTestBase
     }
 
     /**
-     * @expectedException \PDOException
+     * @expectedException Doctrine\DBAL\DBALException
      */
     public function test_should_not_store_commenter_with_null_email()
     {

@@ -32,7 +32,7 @@ class PostRepositoryTest extends RepositoryTestBase
     }
 
     /**
-     * @expectedException \PDOException
+     * @expectedException Doctrine\DBAL\DBALException
      */
     public function test_should_not_store_null_title()
     {
@@ -70,7 +70,7 @@ class PostRepositoryTest extends RepositoryTestBase
     }
 
     /**
-     * @expectedException \PDOException
+     * @expectedException Doctrine\DBAL\DBALException
      */
     public function test_should_not_store_null_content()
     {
