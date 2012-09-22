@@ -190,5 +190,11 @@ class UserTest extends TestBase
 
         $this->assertEquals($user, $created);
     }
-}
 
+    public function test_getTokenString_should_return_tokenized_string_of_identifier_and_token()
+    {
+        $string = $this->user->getTokenString();
+
+        $this->assertEquals($this->user->getIdentifier() . ':' . $this->user->getToken(), $string);
+    }
+}

@@ -21,7 +21,8 @@ foreach($namespaces as $namespace => $path) {
 
 $classes = [
     'TwigView' => $lib . DS . '/slim/extras/Views/TwigView.php',
-    'Slim_View' => $lib . DS . '/slim/slim/Slim/View.php' 
+    'Slim_View' => $lib . DS . '/slim/slim/Slim/View.php',
+    'Slim_Http_Request' => $lib . DS . '/slim/slim/Slim/Http/Request.php'
 ];
 
 $map = [];

@@ -19,7 +19,7 @@ $userRepo = new UserRepository();
 $passwordHasher = new PasswordHasher();
 $authenticator = new UserAuthenticator($userRepo, $passwordHasher);
 
-$protected = ['dashboard'];
+$protected = ['admin'];
 $app->hook('slim.before', function() use($app, $unitOfWork, $protected, $userRepo){
     foreach($protected as $route) {
         if('/' . $route == $app->request()->getPath()) {
@@ -67,7 +67,7 @@ $app->post('/register', function() use($app, $userRepo, $authenticator) {
         $user = Entities\User::create($input->username, $input->password);
         $authenticator->initNewUser($user);
         $userRepo->store($user);
-        $app->setCookie('superblorg', $user->getIdentifier() . ':' . $user->getToken());
+        $app->setCookie('superblorg', $user->getTokenString());
         $app->response()->redirect('/dashboard', 303);
     }
     $app->render('register.phtml', array('user' => $input));
