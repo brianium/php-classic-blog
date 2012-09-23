@@ -16,13 +16,9 @@ class SlimAuthenticationServiceTest extends TestBase
     public function setUp()
     {
         parent::setUp();
-        $this->slim = $this->getMockBuilder('Slim')
-                           ->disableOriginalConstructor()
-                           ->getMock();
+        $this->slim = $this->getMockSlim();
         //stub slim object
-        $this->request = $this->getMockBuilder('Slim_Http_Request')
-                              ->disableOriginalConstructor()
-                              ->getMock();
+        $this->request = $this->getMockRequest();
 
         $this->request->expects($this->any())
                       ->method('getPath')
@@ -64,6 +60,36 @@ class SlimAuthenticationServiceTest extends TestBase
     public function test_isAuthenticated_should_return_true_when_no_routes()
     {
         $service = new SlimAuthenticationService($this->slim, $this->userRepo);
+        $this->assertTrue($service->isAuthenticated('cookiename'));
+    }
+
+    public function test_isAuthenticated_should_not_check_users_when_no_routes()
+    {
+        $service = new SlimAuthenticationService($this->slim, $this->userRepo);
+
+        $this->userRepo->expects($this->never())
+                       ->method('getBy');
+
+        $this->assertTrue($service->isAuthenticated('cookiename'));
+    }
+
+    public function test_isAuthenticated_returns_true_when_cookie_present_but_route_not_secured()
+    {
+        $request = $this->getMockRequest();
+        $request->expects($this->any())
+                      ->method('getPath')
+                      ->will($this->returnValue('/doesNotRequireAuth'));
+
+        $slim = $this->getMockSlim();
+        $slim->expects($this->once())
+             ->method('request')
+             ->will($this->returnValue($request));
+
+        $this->cookieReturnsValidCookie($slim);
+
+        $service = new SlimAuthenticationService($slim, $this->userRepo);
+        $service->addRoute('admin');
+
         $this->assertTrue($service->isAuthenticated('cookiename'));
     }
 
@@ -148,11 +174,26 @@ class SlimAuthenticationServiceTest extends TestBase
                    ->will($this->returnValue(null));
     }
 
-    protected function cookieReturnsValidCookie()
+    protected function cookieReturnsValidCookie($slim = null)
     {
-        $this->slim->expects($this->once())
+        if(is_null($slim)) $slim = $this->slim;
+        $slim->expects($this->any())
                    ->method('getCookie')
                    ->with($this->identicalTo('cookiename'))
                    ->will($this->returnValue($this->user->getTokenString()));
+    }
+
+    protected function getMockRequest()
+    {
+        return $this->getMockBuilder('Slim_Http_Request')
+                              ->disableOriginalConstructor()
+                              ->getMock();
+    }
+
+    protected function getMockSlim()
+    {
+        return $this->getMockBuilder('Slim')
+                           ->disableOriginalConstructor()
+                           ->getMock();
     }
 }

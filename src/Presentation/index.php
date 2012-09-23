@@ -7,6 +7,7 @@ use Domain\Entities;
 use Domain\UserAuthenticator;
 use Domain\PasswordHasher;
 use Presentation\Models\Input;
+use Presentation\Services\SlimAuthenticationService;
 
 $app = new Slim(array(
     'view' => 'TwigView',
@@ -18,30 +19,12 @@ $unitOfWork = new UnitOfWork();
 $userRepo = new UserRepository();
 $passwordHasher = new PasswordHasher();
 $authenticator = new UserAuthenticator($userRepo, $passwordHasher);
+$authService = new SlimAuthenticationService($app, $userRepo);
 
-$protected = ['admin'];
-$app->hook('slim.before', function() use($app, $unitOfWork, $protected, $userRepo){
-    foreach($protected as $route) {
-        if('/' . $route == $app->request()->getPath()) {
-            $cookie = $app->getCookie('superblorg');
-            if(!$cookie)
-                $app->response()->redirect('/login', 303);
+$app->hook('slim.before', function() use($app, $authService, $unitOfWork){
+    if(!$authService->isAuthenticated('superblorg'))
+        $app->response()->redirect('/login', 303);
 
-            list($identifier, $token) = explode(':', $app->getCookie('superblorg'));
-            if($identifier) {
-                $users = $userRepo->getBy(['identifier' => $identifier]);
-                if($users) {
-                    $user = $users[0];
-                    $now = time();
-                    if($token != $user->getToken() || $now > $user->getTimeout()) {
-                        $app->response()->redirect('/login', 303);
-                    }
-                }
-            }
-            //make user object for logged in user?
-            break;
-        }
-    }
     $unitOfWork->begin();
 });
 
@@ -74,6 +57,7 @@ $app->post('/register', function() use($app, $userRepo, $authenticator) {
 });
 
 #admin routes
+$authService->addRoute('/^\/admin.*/');
 $app->get('/admin', function() use($app) {
     //list recent posts with comment count? links to add/delete posts
 });

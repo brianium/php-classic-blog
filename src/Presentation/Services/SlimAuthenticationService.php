@@ -24,9 +24,11 @@ class SlimAuthenticationService
     {
         if(empty($this->routes)) return true;
 
-        $route = array_reduce($this->routes, array($this, 'matchesCurrentRoute'), '/.*/');
-
-        return $this->authCookieIsValid($cookiename);
+        foreach($this->routes as $route) {
+            if(!$this->matchesCurrentRoute($route)) continue;
+            return $this->authCookieIsValid($cookiename);
+        }
+        return true;
     }
 
     public function matchesCurrentRoute($route)
