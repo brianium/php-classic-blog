@@ -40,6 +40,12 @@ class SlimAuthenticationService
         return $this->userAuth->isAuthenticated($username, $password);
     }
 
+    public function getLoggedInUser($cookiename)
+    {
+        list($identifier, $token) = $this->splitAuthCookie($cookiename);
+        if($identifier) return $this->userRepo->getBy(['identifier' => $identifier])[0];
+    }
+
     public function login(User $user, $cookiename, $callback = null)
     {
         $user->refresh();

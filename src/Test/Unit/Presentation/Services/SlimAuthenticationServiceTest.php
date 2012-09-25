@@ -199,6 +199,24 @@ class SlimAuthenticationServiceTest extends TestBase
         $this->service->canLogin('username', 'password');
     }
 
+    public function test_getLoggedInUser_should_call_repo_getBy_with_identifier_in_cookie()
+    {
+        $this->cookieReturnsValidCookie();
+
+        $this->userRepoReturnsUserFixture();
+
+        $user = $this->service->getLoggedInUser('cookiename');
+
+        $this->assertEquals($this->user, $user);
+    }
+
+    public function test_getLoggedInUser_returns_null_when_cookie_is_null()
+    {
+        $this->cookieReturnsNull();
+
+        $this->assertNull($this->service->getLoggedInUser("cookiename"));
+    }
+
     protected function cookieReturnsInvalidIdentifier()
     {
         $this->slim->expects($this->once())

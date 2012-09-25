@@ -1,0 +1,27 @@
+{% extends "layout.phtml" %}
+
+{% import "macros/controls.phtml" as controls %}
+
+{% block title %}Add New Post{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="span6">
+
+        <form action="/admin/post" method="post" class="form-horizontal well">
+
+            <h2 class="add-bottom">Add New Post</h2>
+
+            {{ controls.input('text', post, 'title', 'post', 'Title:') }}
+
+            {{ controls.input('textarea', post, 'content', 'post', 'Content:') }}
+
+            {{ controls.input('textarea', post, 'excerpt', 'post', 'Excerpt:') }}
+
+            <div class="form-actions">
+                <input type="submit" value="Publish!" class="btn btn-primary btn-large" />
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

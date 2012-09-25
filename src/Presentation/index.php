@@ -2,7 +2,7 @@
 require dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'bootstrap.php';
 
 use Infrastructure\Persistence\Doctrine\UnitOfWork;
-use Infrastructure\Persistence\Doctrine\UserRepository;
+use Infrastructure\Persistence\Doctrine;
 use Domain\Entities;
 use Domain\UserAuthenticator;
 use Domain\PasswordHasher;
@@ -18,9 +18,8 @@ $app = new Slim(array(
 
 //common objects
 $unitOfWork = new UnitOfWork();
-$userRepo = new UserRepository();
-$hasher = new PasswordHasher();
-$authService = new SlimAuthenticationService($app, $userRepo, new UserAuthenticator($userRepo, $hasher));
+$userRepo = new Doctrine\UserRepository();
+$authService = new SlimAuthenticationService($app, $userRepo, new UserAuthenticator($userRepo, new PasswordHasher()));
 
 $app->hook('slim.before', function() use($app, $authService, $unitOfWork){
     if(!$authService->isAuthenticated(AUTHCOOKIE))
@@ -37,13 +36,16 @@ $app->get('/login', function() use($app) {
     $app->render('login.phtml');
 });
 
-$app->post('/login', function() use($app, $authService, $hasher){
+$app->post('/login', function() use($app, $authService, $userRepo){
     $input = new Input\Login($app->request()->post('login'));
-    if($input->isValid() && $authService->canLogin($input->username, $hasher->hash($input->password)))
-        $authService->login($userRepo->getByUsername($input->username), AUTHCOOKIE, function() use ($app){
-            $app->response()->redirect('/admin', 303);
-        });
-
+    if($input->isValid()) {
+        if($authService->canLogin($input->username, $input->password))
+            $authService->login($userRepo->getByUsername($input->username), AUTHCOOKIE, function() use ($app){
+                $app->response()->redirect('/admin', 303);
+            });
+        else $input->setMessageFor("username", "Invalid username or password");
+    }
+        
     $app->render('login.phtml', ['login' => $input]);
 });
 
@@ -51,7 +53,7 @@ $app->get('/register', function() use($app) {
     $app->render('register.phtml');
 });
 
-$app->post('/register', function() use($app, $userRepo, $authService) {
+$app->post('/register', function() use($app, $authService) {
     $input = Input\User::create($app->request()->post('user'), $userRepo);
     if($input->isValid())
         $authService->register(Entities\User::create($input->username, $input->password), AUTHCOOKIE, function() use($app){
@@ -68,11 +70,15 @@ $app->get('/admin', function() use($app) {
 });
 
 $app->get('/admin/post', function() use($app) {
-    //form to add new post
+    $app->render('add_post.phtml');
 });
 
 $app->post('/admin/post', function() use($app) {
-    //create new post and redirect back to /admin
+    $input = new Input\Post($app->request()->post('post'));
+    if($input->isValid()) {
+        $repo = new Doctrine\PostRepository();
+    }
+    $app->render('add_post.phtml', ['post' => $input]);
 });
 
 #public routes

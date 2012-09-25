@@ -12,7 +12,11 @@
 <div class="control-group{{ invalid }}">
     <label for="{{ id }}" class="control-label">{{ label }}</label>
     <div class="controls">
+        {% if type == "textarea" %}
+        <textarea rows="5" name="{{ name }}[{{ property }}]">{{ attribute(model, property) }}</textarea>
+        {% else %}
         <input type="{{ type }}" placeholder="{{ placeholder|default(property) }}" value="{{ attribute(model, property) }}" class="input-xlarge" id="{{ id }}" name="{{ name }}[{{ property }}]" />
+        {% endif %}
         {% if invalid %}
         <p class="help-block error">
             {{ message }}
