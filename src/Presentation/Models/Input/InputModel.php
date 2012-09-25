@@ -56,6 +56,12 @@ abstract class InputModel
         return $message;
     }
 
+    public function setMessageFor($key, $message)
+    {
+        $this->messages[$key] = $message;
+        return $this;
+    }
+
     protected function setDefaultMessages()
     {
 

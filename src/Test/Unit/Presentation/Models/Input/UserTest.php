@@ -193,6 +193,20 @@ class UserTest extends TestBase
         $this->assertEquals($inputMsgs, $msgs);
     }
 
+    public function test_setMessageFor_should_set_message()
+    {
+        $valid = $this->input->isValid();
+        $this->input->setMessageFor("username", "Hello world");
+        $this->assertEquals('Hello world', $this->input->getMessageFor("username"));
+    }
+
+    public function test_setMessageFor_should_return_self()
+    {
+        $valid = $this->input->isValid();
+        $self = $this->input->setMessageFor("username", "Hello world");
+        $this->assertSame($this->input, $self);
+    }
+
     protected function setLongUsername()
     {
         $username = '';

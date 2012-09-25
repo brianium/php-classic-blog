@@ -35,13 +35,17 @@ class SlimAuthenticationService
         return true;
     }
 
+    public function canLogin($username, $password)
+    {
+        return $this->userAuth->isAuthenticated($username, $password);
+    }
+
     public function login(User $user, $cookiename, $callback = null)
     {
         $user->refresh();
         $this->setAuthCookie($cookiename, $user);
         $this->userRepo->store($user);
-        if(is_callable($callback))
-            $callback();
+        if(is_callable($callback)) $callback();
     }
 
     public function register(User $user, $cookiename, $callback = null)

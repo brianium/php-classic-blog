@@ -9,6 +9,8 @@ use Domain\PasswordHasher;
 use Presentation\Models\Input;
 use Presentation\Services\SlimAuthenticationService;
 
+define('AUTHCOOKIE', 'superblorg');
+
 $app = new Slim(array(
     'view' => 'TwigView',
     'templates.path' => dirname(__FILE__) . DS . 'Views'
@@ -17,10 +19,11 @@ $app = new Slim(array(
 //common objects
 $unitOfWork = new UnitOfWork();
 $userRepo = new UserRepository();
-$authService = new SlimAuthenticationService($app, $userRepo, new UserAuthenticator($userRepo, new PasswordHasher()));
+$hasher = new PasswordHasher();
+$authService = new SlimAuthenticationService($app, $userRepo, new UserAuthenticator($userRepo, $hasher));
 
 $app->hook('slim.before', function() use($app, $authService, $unitOfWork){
-    if(!$authService->isAuthenticated('superblorg'))
+    if(!$authService->isAuthenticated(AUTHCOOKIE))
         $app->response()->redirect('/login', 303);
 
     $unitOfWork->begin();
@@ -34,12 +37,13 @@ $app->get('/login', function() use($app) {
     $app->render('login.phtml');
 });
 
-$app->post('/login', function() use($app, $authenticator){
+$app->post('/login', function() use($app, $authService, $hasher){
     $input = new Input\Login($app->request()->post('login'));
-    if($input->isValid()) {
-        //$auth = $authenticator->isAuthenticated($input->username, $input->password);
-        //refreshAndRedirect        
-    }
+    if($input->isValid() && $authService->canLogin($input->username, $hasher->hash($input->password)))
+        $authService->login($userRepo->getByUsername($input->username), AUTHCOOKIE, function() use ($app){
+            $app->response()->redirect('/admin', 303);
+        });
+
     $app->render('login.phtml', ['login' => $input]);
 });
 
@@ -47,13 +51,13 @@ $app->get('/register', function() use($app) {
     $app->render('register.phtml');
 });
 
-$app->post('/register', function() use($app, $userRepo, $authService, $authenticator) {
+$app->post('/register', function() use($app, $userRepo, $authService) {
     $input = Input\User::create($app->request()->post('user'), $userRepo);
-    if($input->isValid()) {
-        $authenticator->initNewUser($user);
-        $authService->login(Entities\User::create($input->username, $input->password), 'superblorg');
-        $app->response()->redirect('/admin', 303);
-    }
+    if($input->isValid())
+        $authService->register(Entities\User::create($input->username, $input->password), AUTHCOOKIE, function() use($app){
+            $app->response()->redirect('/admin', 303);
+        });
+
     $app->render('register.phtml', ['user' => $input]);
 });
 

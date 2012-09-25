@@ -7,9 +7,7 @@ class Login extends InputModel
     protected function initValidation()
     {
         $this->validator->validate('username', function($v){
-            return $v->require()
-                and $v->atMostChars(50)
-                and $v->uniqueUser();
+            return $v->require();
         })->validate('password', function($v){
             return $v->require();
         });

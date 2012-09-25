@@ -191,6 +191,14 @@ class SlimAuthenticationServiceTest extends TestBase
         $this->service->register($this->user, 'c');
     }
 
+    public function test_canLogin_calls_userAuth_isAuthenticated()
+    {
+        $this->userAuth->expects($this->once())
+                       ->method('isAuthenticated');
+
+        $this->service->canLogin('username', 'password');
+    }
+
     protected function cookieReturnsInvalidIdentifier()
     {
         $this->slim->expects($this->once())
