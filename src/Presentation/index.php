@@ -17,9 +17,7 @@ $app = new Slim(array(
 //common objects
 $unitOfWork = new UnitOfWork();
 $userRepo = new UserRepository();
-$passwordHasher = new PasswordHasher();
-$authenticator = new UserAuthenticator($userRepo, $passwordHasher);
-$authService = new SlimAuthenticationService($app, $userRepo);
+$authService = new SlimAuthenticationService($app, $userRepo, new UserAuthenticator($userRepo, new PasswordHasher()));
 
 $app->hook('slim.before', function() use($app, $authService, $unitOfWork){
     if(!$authService->isAuthenticated('superblorg'))
@@ -33,27 +31,30 @@ $app->hook('slim.after', function() use($app, $unitOfWork) {
 });
 
 $app->get('/login', function() use($app) {
-    
+    $app->render('login.phtml');
 });
 
-$app->post('/login', function() use($app){
-
+$app->post('/login', function() use($app, $authenticator){
+    $input = new Input\Login($app->request()->post('login'));
+    if($input->isValid()) {
+        //$auth = $authenticator->isAuthenticated($input->username, $input->password);
+        //refreshAndRedirect        
+    }
+    $app->render('login.phtml', ['login' => $input]);
 });
 
 $app->get('/register', function() use($app) {
     $app->render('register.phtml');
 });
 
-$app->post('/register', function() use($app, $userRepo, $authenticator) {
+$app->post('/register', function() use($app, $userRepo, $authService, $authenticator) {
     $input = Input\User::create($app->request()->post('user'), $userRepo);
     if($input->isValid()) {
-        $user = Entities\User::create($input->username, $input->password);
         $authenticator->initNewUser($user);
-        $userRepo->store($user);
-        $app->setCookie('superblorg', $user->getTokenString());
-        $app->response()->redirect('/dashboard', 303);
+        $authService->login(Entities\User::create($input->username, $input->password), 'superblorg');
+        $app->response()->redirect('/admin', 303);
     }
-    $app->render('register.phtml', array('user' => $input));
+    $app->render('register.phtml', ['user' => $input]);
 });
 
 #admin routes

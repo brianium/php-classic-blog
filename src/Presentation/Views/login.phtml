@@ -1,0 +1,25 @@
+{% extends "layout.phtml" %}
+
+{% import "macros/controls.phtml" as controls %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="span6 center login">
+
+        <form action="/login" method="post" class="form-horizontal well">
+
+            <h2 class="text-center add-bottom">Login</h2>
+
+            {{ controls.input('text', login, 'username', 'login', 'Username:')  }}
+
+            {{ controls.input('text', login, 'password', 'login', 'Password:')  }}
+
+            <div class="form-actions">
+                <input type="submit" value="Login!" class="btn btn-primary btn-large" />
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -9,6 +9,7 @@ class SlimAuthenticationServiceTest extends TestBase
     protected $request;
 
     protected $userRepo;
+    protected $userAuth;
     protected $user;
 
     protected $service;
@@ -29,23 +30,25 @@ class SlimAuthenticationServiceTest extends TestBase
                    ->will($this->returnValue($this->request));
 
         $this->userRepo = $this->getMock('Domain\\Repositories\\UserRepository');
+        $this->userAuth = $this->getMockAuthenticator();
         $this->user = $this->loadFixture('Test\\Fixtures\\User\\UserNoPosts', 'Domain\\Entities\\User');
 
-        $this->service = new SlimAuthenticationService($this->slim, $this->userRepo);
+        $this->service = new SlimAuthenticationService($this->slim, $this->userRepo, $this->userAuth);
         $this->service->addRoute('admin');
     }
 
     public function test_constructor()
     {
-        $service = new SlimAuthenticationService($this->slim, $this->userRepo);
+        $service = new SlimAuthenticationService($this->slim, $this->userRepo, $this->userAuth);
         $this->assertInstanceOf('Slim', $this->getObjectValue($service, 'slim'));
         $this->assertInstanceOf('Domain\\Repositories\\UserRepository', $this->getObjectValue($service, 'userRepo'));
+        $this->assertInstanceOf('Domain\\UserAuthenticator', $this->getObjectValue($service, 'userAuth'));
         $this->assertEmpty($this->getObjectValue($service, 'routes'));
     }
 
     public function test_addRoute_should_add_route_to_internal_collection()
     {
-        $service = new SlimAuthenticationService($this->slim, $this->userRepo);
+        $service = new SlimAuthenticationService($this->slim, $this->userRepo, $this->userAuth);
         $service->addRoute("admin");
 
         $this->assertEquals(['admin'], $this->getObjectValue($service, 'routes'));
@@ -53,19 +56,19 @@ class SlimAuthenticationServiceTest extends TestBase
 
     public function test_addRoute_should_return_self()
     {
-        $service = new SlimAuthenticationService($this->slim, $this->userRepo);
+        $service = new SlimAuthenticationService($this->slim, $this->userRepo, $this->userAuth);
         $this->assertSame($service, $service->addRoute('admin'));
     }
 
     public function test_isAuthenticated_should_return_true_when_no_routes()
     {
-        $service = new SlimAuthenticationService($this->slim, $this->userRepo);
+        $service = new SlimAuthenticationService($this->slim, $this->userRepo, $this->userAuth);
         $this->assertTrue($service->isAuthenticated('cookiename'));
     }
 
     public function test_isAuthenticated_should_not_check_users_when_no_routes()
     {
-        $service = new SlimAuthenticationService($this->slim, $this->userRepo);
+        $service = new SlimAuthenticationService($this->slim, $this->userRepo, $this->userAuth);
 
         $this->userRepo->expects($this->never())
                        ->method('getBy');
@@ -87,7 +90,7 @@ class SlimAuthenticationServiceTest extends TestBase
 
         $this->cookieReturnsValidCookie($slim);
 
-        $service = new SlimAuthenticationService($slim, $this->userRepo);
+        $service = new SlimAuthenticationService($slim, $this->userRepo, $this->userAuth);
         $service->addRoute('admin');
 
         $this->assertTrue($service->isAuthenticated('cookiename'));
@@ -133,6 +136,59 @@ class SlimAuthenticationServiceTest extends TestBase
     {
         $match = $this->service->matchesCurrentRoute('/^\/ad.*/');
         $this->assertTrue($match);
+    }
+
+    public function test_setAuthCookie_sets_cookie_to_user_token_string()
+    {
+        $this->slim->expects($this->once())
+                   ->method('setCookie')
+                   ->with($this->identicalTo('cookiename', $this->user->getTokenString()));
+
+        $this->service->setAuthCookie('cookiename', $this->user);
+    }
+
+    public function test_login_should_refresh_user()
+    {
+        $user = $this->loadFixture('Test\\Fixtures\\User\\UserNoPosts', 'Domain\\Entities\\User');
+        $this->service->login($this->user, 'c');
+        $this->assertNotEquals($user->getTimeout(), $this->user->getTimeout());
+        $this->assertNotEquals($user->getIdentifier(), $this->user->getIdentifier());
+        $this->assertNotEquals($user->getToken(), $this->user->getToken());
+    }
+
+    public function test_login_should_save_refreshed_user()
+    {
+        $this->userRepo->expects($this->once())
+                       ->method('store')
+                       ->with($this->user);
+
+        $this->service->login($this->user, 'c');
+    }
+
+    public function test_login_sets_auth_cookie()
+    {
+        $this->slim->expects($this->once())
+                   ->method('setCookie');
+
+        $this->service->login($this->user, 'cookiename');
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function test_login_accepts_callable()
+    {
+        $this->service->login($this->user, 'c', function() {
+            throw new \RuntimeException("function called");
+        });
+    }
+
+    public function test_register_hashesPassword()
+    {
+        $this->userAuth->expects($this->once())
+                       ->method('hashPassword');
+
+        $this->service->register($this->user, 'c');
     }
 
     protected function cookieReturnsInvalidIdentifier()
@@ -195,5 +251,11 @@ class SlimAuthenticationServiceTest extends TestBase
         return $this->getMockBuilder('Slim')
                            ->disableOriginalConstructor()
                            ->getMock();
+    }
+
+    protected function getMockAuthenticator() {
+        return $this->getMockBuilder('Domain\\UserAuthenticator')
+                    ->disableOriginalConstructor()
+                    ->getMock();
     }
 }

@@ -1,0 +1,16 @@
+.center {
+    margin:0 auto;
+    float:none !important;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.login form {
+    margin-top:40px;
+}
+
+.add-bottom {
+    margin-bottom:20px;
+}

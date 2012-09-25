@@ -1,16 +1,20 @@
 <?php
 namespace Presentation\Services;
 use Domain\Repositories\UserRepository;
+use Domain\Entities\User;
+use Domain\UserAuthenticator;
 class SlimAuthenticationService
 {
     protected $slim;
     protected $userRepo;
+    protected $userAuth;
     protected $routes;
 
-    public function __construct(\Slim $slim, UserRepository $userRepo, $routes = [])
+    public function __construct(\Slim $slim, UserRepository $userRepo, UserAuthenticator $auth, $routes = [])
     {
         $this->slim = $slim;
         $this->userRepo = $userRepo;
+        $this->userAuth = $auth;
         $this->routes = $routes;
     }
 
@@ -29,6 +33,26 @@ class SlimAuthenticationService
             return $this->authCookieIsValid($cookiename);
         }
         return true;
+    }
+
+    public function login(User $user, $cookiename, $callback = null)
+    {
+        $user->refresh();
+        $this->setAuthCookie($cookiename, $user);
+        $this->userRepo->store($user);
+        if(is_callable($callback))
+            $callback();
+    }
+
+    public function register(User $user, $cookiename, $callback = null)
+    {
+        $this->userAuth->hashPassword($user);
+        $this->login($user, $cookiename, $callback);
+    }
+
+    public function setAuthCookie($cookiename, User $user)
+    {
+        $this->slim->setcookie($cookiename, $user->getTokenString());
     }
 
     public function matchesCurrentRoute($route)
