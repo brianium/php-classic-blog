@@ -1,0 +1,27 @@
+{% extends "layout.phtml" %}
+
+{% block title %}Welcome To Superblorg{% endblock %}
+
+{% block content %}
+<div class="hero-unit">
+    <h1>Welcome!</h1>
+    <p>
+        Checkout the latests posts by our latest and greatest!!
+    </p>
+</div>
+
+<div class="row">
+    <div class="span12">
+        <h2>Recent Posts</h2>
+        {% if(posts) %}
+        <ul>
+        {% for p in posts %}
+            <li class="lead">
+                <a href="/posts/{{ p.getId }}" target="__blank">{{ p.getTitle }}</a> - by <a href="/users/{{ p.getUser.getId }}/posts" target="__blank">{{ p.getUser.getUsername }}</a> - {{ p.getComments|length }} comment(s)
+            </li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

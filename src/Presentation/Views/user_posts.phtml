@@ -15,7 +15,7 @@
             {% for post in posts %}
             <li>
                 <div class="post add-bottom">
-                    <h2>{{ post.getTitle }} - {{ post.getDate|date('Y-m-d') }}</h2>
+                    <h2><a href="/posts/{{ post.getId }}" target="__blank">{{ post.getTitle }}</a> - {{ post.getDate|date('Y-m-d') }}</h2>
 
                     {% if post.getExcerpt %}
                     <div class="excerpt">

@@ -46,13 +46,22 @@ class SlimAuthenticationService
         if($identifier) return $this->userRepo->getBy(['identifier' => $identifier])[0];
     }
 
-    public function login(User $user, $cookiename, $callback = null)
+    public function regenerateUserCookie($cookiename, $user = null)
     {
+        if(is_null($user))
+            $user = $this->getLoggedInUser($cookiename);
+
         $user->refresh();
         $this->setAuthCookie($cookiename, $user);
         $this->userRepo->store($user);
+    }
+
+    public function login(User $user, $cookiename, $callback = null)
+    {
+        $this->regenerateUserCookie($cookiename, $user);
         if(is_callable($callback)) $callback();
     }
+
 
     public function register(User $user, $cookiename, $callback = null)
     {

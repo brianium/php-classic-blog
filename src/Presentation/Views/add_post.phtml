@@ -1,4 +1,4 @@
-{% extends "layout.phtml" %}
+{% extends "layout-admin.phtml" %}
 
 {% import "macros/controls.phtml" as controls %}
 
@@ -25,13 +25,17 @@
     </div>
     {% if (user_posts or saved) %}
     <div class="span6">
-        <h2>Posts By This User</h2>
+        <h2>Previous Posts</h2>
         <ul>
             {% for p in user_posts %}
-            <li>{{ p.getTitle }} - {{ p.getDate|date('Y-m-d') }}</li>
+            <li>
+                <a href="/posts/{{ p.getId }}" target="_blank">{{ p.getTitle }} - {{ p.getDate|date('Y-m-d') }}</a>
+            </li>
             {% endfor %}
             {% if saved %}
-            <li>{{ saved.getTitle }} - {{ p.getDate|date('Y-m-d') }}</li>
+            <li>
+                <a href="/posts/{{ p.getId }}" target="_blank">{{ p.getTitle }} - {{ p.getDate|date('Y-m-d') }}</a>
+            </li>
             {% endif %}
         </ul>
     </div>

@@ -1,10 +1,9 @@
 <?php
+use Domain\Entities;
+use Presentation\Models\Input;
 use Infrastructure\Persistence\Doctrine\PostRepository;
 
 $authService->addRoute('/^\/admin.*/');
-$app->get('/admin', function() use($app) {
-    //list recent posts with comment count? links to add/delete posts
-});
 
 $postRepo = new PostRepository();
 $app->get('/admin/post', function() use($app, $postRepo, $authService) {

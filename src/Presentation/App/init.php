@@ -20,6 +20,8 @@ $authService = new SlimAuthenticationService($app, $userRepo, new UserAuthentica
 $app->hook('slim.before', function() use($app, $authService, $unitOfWork){
     if(!$authService->isAuthenticated(AUTHCOOKIE))
         $app->response()->redirect('/login', 303);
+    if($user = $authService->getLoggedInUser(AUTHCOOKIE))
+        $authService->regenerateUserCookie(AUTHCOOKIE, $user);
 
     $unitOfWork->begin();
 });

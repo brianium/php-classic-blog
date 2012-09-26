@@ -1,4 +1,6 @@
 <?php
+use Domain\Entities;
+use Presentation\Models\Input;
 use Domain\Commenter;
 use Domain\CommentSanitizer;
 use Infrastructure\Persistence\Doctrine\CommentRepository;
