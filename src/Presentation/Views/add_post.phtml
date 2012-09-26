@@ -23,5 +23,18 @@
             </div>
         </form>
     </div>
+    {% if (user_posts or saved) %}
+    <div class="span6">
+        <h2>Posts By This User</h2>
+        <ul>
+            {% for p in user_posts %}
+            <li>{{ p.getTitle }} - {{ p.getDate|date('Y-m-d') }}</li>
+            {% endfor %}
+            {% if saved %}
+            <li>{{ saved.getTitle }} - {{ p.getDate|date('Y-m-d') }}</li>
+            {% endif %}
+        </ul>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

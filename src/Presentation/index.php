@@ -6,6 +6,7 @@ use Infrastructure\Persistence\Doctrine;
 use Domain\Entities;
 use Domain\UserAuthenticator;
 use Domain\PasswordHasher;
+use Domain\CommentSanitizer;
 use Presentation\Models\Input;
 use Presentation\Services\SlimAuthenticationService;
 
@@ -69,16 +70,19 @@ $app->get('/admin', function() use($app) {
     //list recent posts with comment count? links to add/delete posts
 });
 
-$app->get('/admin/post', function() use($app) {
-    $app->render('add_post.phtml');
+$postRepo = new Doctrine\PostRepository();
+$app->get('/admin/post', function() use($app, $postRepo, $authService) {
+    $app->render('add_post.phtml', ['user_posts' => $postRepo->getBy(['user' => $authService->getLoggedInUser('superblorg')])]);
 });
 
-$app->post('/admin/post', function() use($app) {
+$app->post('/admin/post', function() use($app, $authService, $postRepo) {
     $input = new Input\Post($app->request()->post('post'));
-    if($input->isValid()) {
-        $repo = new Doctrine\PostRepository();
-    }
-    $app->render('add_post.phtml', ['post' => $input]);
+    $user = $authService->getLoggedInUser('superblorg');
+    $post = Entities\Post::create($input->title, $input->content, $input->excerpt, $user);
+    if($input->isValid())
+        $postRepo->store($post);
+
+    $app->render('add_post.phtml', ['post' => $input, 'user_posts' => $postRepo->getBy(['user' => $user]), 'saved' => $post]);
 });
 
 #public routes

@@ -76,4 +76,14 @@ class Post extends Entity
         $this->user = $user;
         $user->addPost($this);
     }
+
+    public static function create($title, $content, $excerpt, User $user) 
+    {
+        $post = new Post();
+        $post->setTitle($title);
+        $post->setContent($content);
+        $post->setExcerpt($excerpt);
+        $post->setUser($user);
+        return $post;
+    }
 }

@@ -115,4 +115,17 @@ class PostTest extends TestBase
         $this->post->setUser($user);
         $this->assertContains($this->post, $user->getPosts());
     }
+
+    public function test_create_method_creates_new_post()
+    {
+        $user = new User();
+        $date = new \DateTime("now");
+        $post = Post::create("title", "content", "excerpt", $user);
+
+        $this->assertEquals("title", $post->getTitle());
+        $this->assertEquals("excerpt", $post->getExcerpt());
+        $this->assertEquals("content", $post->getContent());
+        $this->assertSame($user, $post->getUser());
+        $this->assertEquals($date, $post->getDate());
+    }
 }
