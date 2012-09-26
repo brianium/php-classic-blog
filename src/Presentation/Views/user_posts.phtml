@@ -1,0 +1,36 @@
+{% extends "layout.phtml" %}
+
+{% block title %}Posts For {{ user.getUsername }}{% endblock %}
+
+{% block content %}
+<div class="hero-unit">
+    <h1>Posts By {{ user.getUsername }}</h1>
+</div>
+
+<div class="row">
+    {% set posts = user.getPosts %}
+    {% if (posts) %}
+    <div class="span12">
+        <ul>
+            {% for post in posts %}
+            <li>
+                <div class="post add-bottom">
+                    <h2>{{ post.getTitle }} - {{ post.getDate|date('Y-m-d') }}</h2>
+
+                    {% if post.getExcerpt %}
+                    <div class="excerpt">
+                        <p>
+                        {{ post.getExcerpt }}
+                        </p>
+                    </div>
+                    {% endif %}
+
+                    <a href="#" class="btn">Read More</a>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

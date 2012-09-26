@@ -1,0 +1,59 @@
+{% extends "layout.phtml" %}
+
+{% import "macros/controls.phtml" as controls %}
+
+{% block title %}{{ post.getTitle }}{% endblock %}
+
+{% block content %}
+<div class="hero-unit">
+    <h1>{{ post.getTitle }}</h1>
+</div>
+
+<div class="row">
+    <div class="span12 post">
+        <div class="post-content add-bottom">
+            {{ post.getContent }}
+        </div>
+        {% set comments = post.getComments %}
+        {% if(comments) %}
+        <div class="post-comments">
+            <h2>Comments</h2>
+            <ul>
+                {% for c in comments %}
+                <li>
+                    <div class="comment add-bottom">
+                        <h2>
+                            {% if(c.getCommenter.getUrl)  %}
+                            <a href="{{ c.getCommenter.getUrl }}">{{ c.getCommenter.getName }}</a> 
+                            {% else %}
+                            {{ c.getCommenter.getName }}
+                            {% endif %}
+                            says:
+                        </h2>
+                        <p>
+                            {{ c.getText }}
+                        </p>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        <h3>Leave A Comment</h3>
+            <form action="/posts/{{ post.getId }}" method="post" class="form-horizontal well">
+
+            {{ controls.input('text', comment, 'commenter_name', 'comment', 'Your name:', 'your name')  }}
+            
+            {{ controls.input('text', comment, 'commenter_email', 'comment', 'Your email:', 'your@email.address') }}
+
+            {{ controls.input('text', comment, 'commenter_url', 'comment', 'Your website:', 'http://www.yoursite.com') }}
+
+            {{ controls.input('textarea', comment, 'text', 'comment', 'Your comment:') }}
+
+            <div class="form-actions">
+                <input type="submit" value="Post comment" class="btn btn-primary btn-large" />
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

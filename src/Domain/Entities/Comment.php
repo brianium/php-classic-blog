@@ -60,4 +60,13 @@ class Comment extends Entity
         $post->addComment($this);
         $this->post = $post;
     }
+
+    public static function create($text, Commenter $c, Post $p)
+    {
+        $comment = new Comment();
+        $comment->setText($text);
+        $comment->setCommenter($c);
+        $comment->setPost($p);
+        return $comment;
+    }
 }

@@ -93,6 +93,19 @@ class CommentTest extends TestBase
         $this->assertContains($this->comment, $post->getComments());
     }
 
+    public function test_create_method_creates_new_comment()
+    {
+        $commenter = new Commenter("A", "B", "C");
+        $post = new Post();
+        $date = new \DateTime('now');
+        $comment = Comment::create("text", $commenter, $post);
+
+        $this->assertEquals("text", $comment->getText());
+        $this->assertEquals($date, $comment->getDate());
+        $this->assertEquals($commenter, $comment->getCommenter());
+        $this->assertSame($post, $comment->getPost());
+    }
+
     protected function setCommenter()
     {
         $commenter = new Commenter('Johnny Test', 'jtest@email.com', 'http://jtest.com');
