@@ -1,0 +1,27 @@
+{% extends "layout.phtml" %}
+
+{% block title %}Superblorg! Authors{% endblock %}
+
+{% block content %}
+<div class="hero-unit">
+    <h1>Authors</h1>
+    <p>
+        Take a look at this listing of Superblorg! authors.
+    </p>
+</div>
+
+<div class="row">
+    <div class="span12">
+        <h2>Authors</h2>
+        {% if(users) %}
+        <ul>
+        {% for u in users %}
+            <li class="lead">
+                <a href="/users/{{ u.getId }}/posts" target="__blank">{{ u.getUsername }}</a> - {{ u.getPosts|length }} post(s)
+            </li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

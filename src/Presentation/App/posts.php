@@ -32,3 +32,8 @@ $app->post('/posts/:id', function($pid) use($app, $postRepo, $commentRepo) {
     }
     $app->render('single_post.phtml', ['post' => $post, 'comment' => $input]);
 });
+
+$app->get('/users', function() use ($app, $userRepo) {
+    $users = $userRepo->getAll();
+    $app->render('users.phtml', ['users' => $users]);
+});
